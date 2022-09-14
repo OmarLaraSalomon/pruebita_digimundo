@@ -7,6 +7,7 @@ table {
 
 
 th, td {
+   padding: 5px 10px;
    width: 25%;
    text-align: left;
    vertical-align: top;
@@ -28,30 +29,42 @@ h1{
 }
 
 
-.table-responsive {
-   min-height: .01%;
-   overflow-x: auto;
+body{
+
+   margin: 0;
+    font-family: verdana;
+
 }
 
-@media screen and (max-width: 767px) {
-   .table-responsive {
-       width: 100%;
-       margin-bottom: 15px;
-       overflow-y: hidden;
-       -ms-overflow-style: -ms-autohiding-scrollbar;
-       border: 1px solid #ddd;
-   }
-   .table-responsive > .table {
-       margin-bottom: 0;
-       display: block;
-       overflow-x: auto;
-   }
-   .table-responsive > .table > thead > tr > th,
-   .table-responsive > .table > tbody > tr > th,
-   .table-responsive > .table > tfoot > tr > th,
-   .table-responsive > .table > thead > tr > td,
-   .table-responsive > .table > tbody > tr > td,
-   .table-responsive > .table > tfoot > tr > td {
-       white-space: nowrap;
-   }
+header{
+
+   background: purple;
+   color: white;
+   padding: 1px;
+}
+
+main{
+   padding: 1em 2em;
+}
+
+@media (max-width: 30em) {
+  table tr{
+   display: flex;
+   flex-direction: column;
+   border:1px solid gray;
+   padding: 1e;
+   margin-bottom: 1em;
+
+  }
+
+  table td[data-title]{
+   display: flex;
+  }
+
+  table td[data-title]::before{
+   content: attr(data-title);
+   width: 90px;
+   font-weight: bold;
+  }
+   
 }
