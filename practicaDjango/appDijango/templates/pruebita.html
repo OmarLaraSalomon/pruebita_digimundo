@@ -1,4 +1,6 @@
-<<!DOCTYPE html>
+<!DOCTYPE html>
+<!--jala los estaticos-->
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -55,13 +57,17 @@
       <tbody>
         <tr>
 
+
             <td data-title="id">1</td>
         
             <td data-title="nombre">bad bunny</td>
         
             <td data-title="descripcion">Es uno de los raperos que popularizó el subgénero del Hip - Hop</td>
 
-            <td data-title="imagen"> <img src="https://www.portafolio.co/files/article_multimedia/uploads/2022/06/30/62be0e1f4f9f0.jpeg"WIDTH=170 HEIGHT=100  alt="bad bunny"></td>
+            <td data-title="imagen">
+              
+              <td data-title="imagen"> <img src="{% static 'imgs/cobra kai.jpg' %}" alt="bad bunny"></td>
+
         
             <td data-title="canal"><a href="https://www.youtube.com/user/ZarcortGame">Canal de Youtube</a></td>
     
