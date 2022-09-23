@@ -5,7 +5,9 @@ table {
     border: 1px solid #000;
  }
 
-
+body{
+   background-color: red;
+}
  th, td {
     width: 25%;
     text-align: left;
@@ -15,7 +17,8 @@ table {
 
 
  h1{
-    text-align: center 
+    text-align: center
+    
  }
 
 

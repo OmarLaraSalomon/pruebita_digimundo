@@ -5,7 +5,7 @@ from importlib.resources import contents
 from sqlite3 import Timestamp
 from time import time, timezone
 # Create your models here.
-class Post(models.Model):
+class Post (models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, unique=True, null=True)
     first_name = models.CharField(max_length=250, null=True)
     last_name = models.CharField(max_length=250, null=True)

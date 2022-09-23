@@ -1,6 +1,7 @@
 
 from django.shortcuts import render, redirect
 from .models import *
+from .models import Post
 from .forms import UserRegisterForm
 from django.contrib import messages
 from django.http import HttpResponse
@@ -35,6 +36,7 @@ def registro(request):
 
 	context = { 'form' : form }
 	return render(request, 'social/registro.html', context)
+
 
 
  
