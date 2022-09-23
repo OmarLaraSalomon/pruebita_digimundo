@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    'django.contrib.humanize',
     "appDijango",
 ]
 
@@ -124,8 +125,8 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-LOGIN_REDIRECT_URL = 'inicio'
-LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'feed'
+LOGIN_URL = 'pruebita'
 
 #STATIC_ROOT= (os.path.join(BASE_DIR, 'appDjango/static'),) 
 

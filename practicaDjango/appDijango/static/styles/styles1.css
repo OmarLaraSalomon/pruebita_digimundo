@@ -1,0 +1,26 @@
+table {
+    border-collapse: separate;
+    border-spacing: 5px;
+    
+    border: 1px solid #000;
+ }
+
+
+ th, td {
+    width: 25%;
+    text-align: left;
+    vertical-align: top;
+    border: 1px solid rebeccapurple;
+ }
+
+
+ h1{
+    text-align: center 
+ }
+
+
+
+ img {
+   margin: auto;
+   display: block;
+   }
