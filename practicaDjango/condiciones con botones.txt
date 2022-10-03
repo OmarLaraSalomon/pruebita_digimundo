@@ -1,0 +1,39 @@
+
+
+      function uncheck(){
+checkbox2.onclick = function(){
+if(document.getElementById("liderField").checked==true){
+        
+    }else{
+        document.getElementById("liderField").value="false";
+    }
+
+}
+}
+
+
+
+      if (document.getElementById('liderField').checked==true)
+{
+alert('Es lider esta seleccionado');
+}else{
+  
+  document.getElementById("liderField").checked="false";
+}
+
+
+
+
+   $(document).ready(function(){
+//asi indica que el control comienza con un check
+$('#liderField').prop( "checked" ,false);
+//asi podemos preguntar si el check esta o no y regresar un valor
+$('#liderField').click(function(){
+if($('#liderField').is(':checked')){
+  alert("Es lider esta seleccionado");
+}else{ 
+  alert("no es lider :(");
+}
+});
+   });
+

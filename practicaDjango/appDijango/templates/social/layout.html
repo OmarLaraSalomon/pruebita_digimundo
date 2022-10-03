@@ -23,6 +23,8 @@
 				{% else %}
 				<li><a href="{% url 'registro' %}">Register</a></li>
 				<li><a href="{% url 'login' %}">Login</a></li>
+				
+				
 				{% endif %}
 				
 				
@@ -51,6 +53,7 @@
 			{% if request.user.is_authenticated %}
 			<a class="profile" href="{% url 'perfil' %}">Mi Perfil</a>
 			<a class="new" href="{% url 'pruebita' %}">Prueba</a>
+			<a class="datos" href="{% url 'contactosregistro' %}">Llenar datos</a>
 			{% endif %}
 		</nav>
 

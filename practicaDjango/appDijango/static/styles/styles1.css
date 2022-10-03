@@ -6,7 +6,9 @@ table {
  }
 
 body{
-   background-color: red;
+	background: #ae00ff;
+	
+	font-family: 'Varela Round', Helvetica, Arial, serif;
 }
  th, td {
     width: 25%;

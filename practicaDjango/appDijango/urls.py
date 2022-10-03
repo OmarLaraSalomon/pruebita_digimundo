@@ -12,6 +12,7 @@ urlpatterns = [
     url('^login/$' , LoginView.as_view(template_name='social/login.html'), name="login"),
     url('^logout/$' , LogoutView.as_view(template_name='social/logout.html'), name="logout"),
     url('^acceso/$' , views.retorno, name="pruebita"),
+    url('^registro/$' , views.contactosregistro, name="contactosregistro"),
 ]
 
 

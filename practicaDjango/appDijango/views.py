@@ -50,8 +50,28 @@ def login(request):
 def retorno(request):
  
   return render(request, 'social/pruebita.html')
- 
-    
+
+def contactosregistro(request):
+  if request.method == 'POST':  
+       
+        datos = Post.objects.create(
+          
+                user_id=request.POST['user'], 
+                first_name=request.POST['nombre'], 
+                last_name=request.POST['apellidos'], 
+                telefono=request.POST['telefono'], 
+                telefono_casa=request.POST['telefono_casa'], 
+                nacimiento=request.POST['nacimiento'], 
+                direccion=request.POST['direccion'],  
+                contacto_emergencia=request.POST['contacto_emergencia'], 
+                telefono_emergencia=request.POST['telefono_emergencia'], 
+                puesto=request.POST['puesto'],
+                departamento=request.POST['departamento'],
+                is_leader=request.POST['lider'],
+            
+          )
+        datos.save()
+  return render(request, 'social/contacto.html')
 
 
 
