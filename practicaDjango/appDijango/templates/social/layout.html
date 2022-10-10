@@ -23,14 +23,19 @@
 				<li><a href="{% url 'logout' %}">Logout</a></li>
 				<li><a href="{% url 'registro' %}">Register</a></li>
 				<li><a href="{% url 'login' %}">Login</a></li>
-				<p>
-					eres admin
-				</p>
+				<h2>
+				eres admin	
+				</h2>
+					
+				
 				{% else %}
 				<li><a href="{% url 'logout' %}">Logout</a></li>
 				<li><a href="{% url 'registro' %}">Register</a></li>
 				<li><a href="{% url 'login' %}">Login</a></li>
-				<p>eres usuario</p>
+				
+				<h2>
+					eres usuario
+					</h2>
 				
 				{% endif %}
 				
@@ -39,7 +44,7 @@
 		</nav>
 	</header>
 
-	
+
 	
 	{% if messages %}
 		{% for message in messages %}
@@ -62,11 +67,11 @@
 		<a class="feed" href="{% url 'feed' %}">Inicio</a>
 
 		<a class="datos" href="{% url 'contactosregistro' %}">Llenar datos</a>
-		
+		&nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp;
 		<a href="{% url 'consultas' %}">Consultas</a>
-
+		&nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp;
 		<a href="{% url 'consultarc' %}">Consultar Correo</a>
-
+		&nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp;
 		{% else %}
 
 		<a class="feed" href="{% url 'feed' %}">Inicio</a>
