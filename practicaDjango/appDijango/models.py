@@ -1,3 +1,4 @@
+from tabnanny import verbose
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.deletion import CASCADE
@@ -18,3 +19,17 @@ class Post (models.Model):
     puesto = models.CharField(max_length=250, null=True)
     departamento = models.CharField(max_length=250, null=True)
     is_leader = models.BooleanField(default=False,null=True)
+
+
+class Correo (models.Model):
+    nombre = models.CharField(max_length=90)
+    apellidos = models.CharField(max_length=30)
+    correo_electronico = models. EmailField(max_length=254)
+    telefono = models.CharField(max_length=100)
+    empresa = models.CharField(max_length=30)
+    cargo = models.CharField(max_length=30)
+    comentarios = models.TextField()
+  
+
+    
+    

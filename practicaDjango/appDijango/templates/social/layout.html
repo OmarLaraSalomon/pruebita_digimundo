@@ -16,14 +16,21 @@
 
 	<header class="main-head">
 		<nav class="main">
-			<h1 id="logo">Hola</h1>
+			<h1 id="logo">Bienvenido</h1>
 			<ul>
-				{% if request.user.is_authenticated %}
+
+				{% if user.is_superuser == True %}
 				<li><a href="{% url 'logout' %}">Logout</a></li>
-				{% else %}
 				<li><a href="{% url 'registro' %}">Register</a></li>
 				<li><a href="{% url 'login' %}">Login</a></li>
-				
+				<p>
+					eres admin
+				</p>
+				{% else %}
+				<li><a href="{% url 'logout' %}">Logout</a></li>
+				<li><a href="{% url 'registro' %}">Register</a></li>
+				<li><a href="{% url 'login' %}">Login</a></li>
+				<p>eres usuario</p>
 				
 				{% endif %}
 				
@@ -49,12 +56,35 @@
 	<div class="main">
 		
 		<nav class="second-nav">
-			<a class="feed" href="{% url 'feed' %}">Inicio</a>
-			{% if request.user.is_authenticated %}
-			<a class="profile" href="{% url 'perfil' %}">Mi Perfil</a>
-			<a class="new" href="{% url 'pruebita' %}">Prueba</a>
-			<a class="datos" href="{% url 'contactosregistro' %}">Llenar datos</a>
+		{% if user.is_superuser == True  %}
+
+		
+		<a class="feed" href="{% url 'feed' %}">Inicio</a>
+
+		<a class="datos" href="{% url 'contactosregistro' %}">Llenar datos</a>
+		
+		<a href="{% url 'consultas' %}">Consultas</a>
+
+		<a href="{% url 'consultarc' %}">Consultar Correo</a>
+
+		{% else %}
+
+		<a class="feed" href="{% url 'feed' %}">Inicio</a>
+			
+			
+		<a class="profile" href="{% url 'perfil' %}">Mi Perfil</a>
+		
+		<a class="correo" href="{% url 'mandarcorreo' %}">Contactanos</a>
+		&nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp;
+<a class="carru" href="{% url 'carrusel' %}">Carrusel</a>
+
+
+
+
+			<!-- <a class="new" href="{% url 'pruebita' %}">Prueba</a> -->
 			{% endif %}
+			
+			
 		</nav>
 
 

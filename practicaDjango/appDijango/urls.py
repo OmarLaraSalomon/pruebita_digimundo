@@ -13,6 +13,10 @@ urlpatterns = [
     url('^logout/$' , LogoutView.as_view(template_name='social/logout.html'), name="logout"),
     url('^acceso/$' , views.retorno, name="pruebita"),
     url('^registro/$' , views.contactosregistro, name="contactosregistro"),
+    url('^consulta/$' , views.consultar, name="consultas"),
+    url('^carru/$' , views.carrusel, name="carrusel"),
+    url('^correo/$' , views.mandarcorreo, name="mandarcorreo"),
+    url('^consultarcorreo/$' , views.consultarc, name="consultarc"),
 ]
 
 
