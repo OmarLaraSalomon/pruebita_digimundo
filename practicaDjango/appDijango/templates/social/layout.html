@@ -19,24 +19,11 @@
 			<h1 id="logo">Bienvenido</h1>
 			<ul>
 
-				{% if user.is_superuser == True %}
+				{% if request.user.is_authenticated %}
 				<li><a href="{% url 'logout' %}">Logout</a></li>
-				<li><a href="{% url 'registro' %}">Register</a></li>
-				<li><a href="{% url 'login' %}">Login</a></li>
-				<h2>
-				eres admin	
-				</h2>
-					
-				
 				{% else %}
-				<li><a href="{% url 'logout' %}">Logout</a></li>
 				<li><a href="{% url 'registro' %}">Register</a></li>
 				<li><a href="{% url 'login' %}">Login</a></li>
-				
-				<h2>
-					eres usuario
-					</h2>
-				
 				{% endif %}
 				
 				
@@ -61,11 +48,13 @@
 	<div class="main">
 		
 		<nav class="second-nav">
+		{% if request.user.is_authenticated %}
 		{% if user.is_superuser == True  %}
 
-		
+		<h2>eres admmin</h2>
 		<a class="feed" href="{% url 'feed' %}">Inicio</a>
-
+		<a class="carru" href="{% url 'carrusel' %}">Carrusel</a>
+		&nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp;
 		<a class="datos" href="{% url 'contactosregistro' %}">Llenar datos</a>
 		&nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp;
 		<a href="{% url 'consultas' %}">Consultas</a>
@@ -74,6 +63,7 @@
 		&nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp;
 		{% else %}
 
+<h2>eres usuario</h2>
 		<a class="feed" href="{% url 'feed' %}">Inicio</a>
 			
 			
@@ -81,13 +71,17 @@
 		
 		<a class="correo" href="{% url 'mandarcorreo' %}">Contactanos</a>
 		&nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp;
-<a class="carru" href="{% url 'carrusel' %}">Carrusel</a>
+		{% endif %}
+		
+         {% else %}
 
 
-
+        {% endif %}
+		
 
 			<!-- <a class="new" href="{% url 'pruebita' %}">Prueba</a> -->
-			{% endif %}
+			
+			
 			
 			
 		</nav>
