@@ -32,11 +32,12 @@
     
     <td>{{value.nombre}} </td>
     <td>{{value.cantidad}} </td>
-    <td></td>
+    <td>
      
-     <a href="#" class="btn btn-sm btn-success">+</a>
-    
-    <!--  <a href="{% url 'restar' value.producto.id %}" class="btn btn-sm btn-success">-</a>    -->
+    <a href="{% url 'agregar' value.producto_id %}" class="btn btn-sm btn-success">+</a>
+
+    <a href="{% url 'restar' value.producto_id %}" class="btn btn-sm btn-success">-</a>
+    </td>
     
     {{value.precio}} MXN$
     </tr>

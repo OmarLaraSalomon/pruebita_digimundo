@@ -31,13 +31,15 @@
         </div>
 
         <div class="card-footer text-center">
-          <a href="#" class="btn btn-success">Agregar al carrito</a>
-        
+          <a href="{% url 'agregar' producto.id %}" class="btn btn-success">Agregar al carrito</a>
         </div>
     </div>
 
 
   </div>
+  
+  
+
   {% endfor %} 
 
 
@@ -55,3 +57,5 @@
 
 
 {% endblock %}
+
+

@@ -180,15 +180,7 @@ def produ(request):
 
   return render(request, 'social/productos.html', {"productos": productos})
 
-
-
-
-
-
-
-
-
-def agregar_producto(request, producto_id):
+def agregar_producto(request, producto_id=None):
     carro = Carro (request)
     producto = Productos.objects.get(id=producto_id)
     carro.agregar(producto=producto)
@@ -196,19 +188,19 @@ def agregar_producto(request, producto_id):
 
 
 
-def eliminar_producto(request, producto_id):
+def eliminar_producto(request, producto_id=None):
     carro = Carro(request)
     producto = Productos.objects.get(id=producto_id)
     carro.eliminar(producto=producto)
     return redirect("productos")
 
-def restar_producto(request, producto_id):
+def restar_producto(request, producto_id=None):
     carro = Carro(request)
     producto = Productos.objects.get(id=producto_id)
     carro.restar_producto(producto=producto)
     return redirect("productos")
 
-def limpiar_carro(request, producto_id):
+def limpiar_carro(request, producto_id=None):
     carro = Carro(request)
     producto= Productos.objects.get(id=producto_id)
     carro.agregar(producto=producto)

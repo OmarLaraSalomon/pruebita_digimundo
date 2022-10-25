@@ -53,7 +53,7 @@ class CategoriaProd(models.Model):
 
 
 class Productos (models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='productos', null=True)
+  
     nombre = models.CharField(max_length=90)
     categoria = models.ForeignKey(CategoriaProd,on_delete=models.CASCADE)
     imagen = models.ImageField(upload_to="productos", null=True, blank=True)

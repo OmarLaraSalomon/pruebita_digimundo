@@ -27,9 +27,32 @@ urlpatterns = [
     url('^home/$' , views.home, name="home"),
 
 
+
+
+# agregar  producto
+
+  #este checa si exsite
+    path('agregar/', views.agregar_producto, name="agregar"),
+    
+     #este manda el parametro 
+    path('agregar/<str:producto_id>/', views.agregar_producto, name="agregar"),
+    
+
+    #quitar un producto con boton 
+   
+   #este checa si exsite
+    path('restar/', views.restar_producto, name="restar"),
+    #este manda el parametro 
+    path('restar/<str:producto_id>/', views.restar_producto, name="restar"),
+
+
+    url('limpiar/', views.limpiar_carro, name="limpiar"),
+ url('eliminar/<str:producto_id>/', views.eliminar_producto, name="eliminar"),
 ]
 
 urlpatterns+=static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+
 
 
 

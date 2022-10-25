@@ -8,7 +8,7 @@ class Carro:
 
             carro=self.session["carro"] = {}
            
-        else:
+      #  else:
             self.carro = carro
             
 
