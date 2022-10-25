@@ -51,10 +51,12 @@
 		{% if request.user.is_authenticated %}
 		{% if user.is_superuser == True  %}
 
-		<h2>eres admmin</h2>
+		
 		<a class="feed" href="{% url 'feed' %}">Inicio</a>
-		<a class="carru" href="{% url 'carrusel' %}">Carrusel</a>
 		&nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp;
+		<a class="home" href="{% url 'home' %}">Tiendita</a>
+		&nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp;
+		
 		<a class="datos" href="{% url 'contactosregistro' %}">Llenar datos</a>
 		&nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp;
 		<a href="{% url 'consultas' %}">Consultas</a>
@@ -63,16 +65,21 @@
 		&nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp;
 		{% else %}
 
-<h2>eres usuario</h2>
+
 		<a class="feed" href="{% url 'feed' %}">Inicio</a>
-			
+		&nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp;
 			
 		<a class="profile" href="{% url 'perfil' %}">Mi Perfil</a>
+		&nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp;
 		
+		<a class="home" href="{% url 'home' %}">tiendita</a>
+		&nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp;
+
 		<a class="correo" href="{% url 'mandarcorreo' %}">Contactanos</a>
 		&nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp;
-		{% endif %}
 		
+		{% endif %}
+
          {% else %}
 
 

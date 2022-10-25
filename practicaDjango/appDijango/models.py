@@ -1,3 +1,4 @@
+from distutils.command.upload import upload
 from tabnanny import verbose
 from django.db import models
 from django.contrib.auth.models import User
@@ -5,6 +6,7 @@ from django.db.models.deletion import CASCADE
 from importlib.resources import contents
 from sqlite3 import Timestamp
 from time import time, timezone
+
 # Create your models here.
 class Post (models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, unique=True, null=True)
@@ -29,7 +31,59 @@ class Correo (models.Model):
     empresa = models.CharField(max_length=30)
     cargo = models.CharField(max_length=30)
     comentarios = models.TextField()
-  
 
+
+
+class CategoriaProd(models.Model):
+    
+    nombre = models.CharField(max_length=90)
+    created = models.DateTimeField(auto_now_add=True)
+    update = models.DateTimeField(auto_now_add=True)
+
+
+    class Meta:
+        verbose_name= "categoriaProd"
+        verbose_name_plural= "categoriasProd"
+
+  #salida 
+    def __str__(self):
+        return self.nombre
+
+
+
+
+class Productos (models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='productos', null=True)
+    nombre = models.CharField(max_length=90)
+    categoria = models.ForeignKey(CategoriaProd,on_delete=models.CASCADE)
+    imagen = models.ImageField(upload_to="productos", null=True, blank=True)
+    precio= models.FloatField()
+    disponibilidad=models.BooleanField(default=True)
+    created = models.DateTimeField(auto_now_add=True)
+    update = models.DateTimeField(auto_now_add=True)
+
+
+    class Meta:
+       
+        verbose_name= "Producto"
+
+
+
+class Servicios  (models.Model):
+    
+    titulo = models.CharField(max_length=90)
+    contenido = models.CharField(max_length=90)
+    imagen = models.ImageField(upload_to="servicios", null=True, blank=True)
+    created = models.DateTimeField(auto_now_add=True)
+    update = models.DateTimeField(auto_now_add=True)
+
+
+    class Meta:
+       
+        verbose_name= "servicio"
+        verbose_name_plural= "servicios"
     
     
+  #salida 
+    def __str__(self):
+        return self.titulo

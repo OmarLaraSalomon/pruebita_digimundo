@@ -4,6 +4,10 @@ from django.shortcuts import render, redirect
 from .models import *
 from .models import Post
 from .models import Correo
+from .models import Productos
+from .models import Servicios
+from .carro import Carro
+
 from .forms import UserRegisterForm
 from django.contrib import messages
 from django.http import HttpResponse
@@ -17,6 +21,12 @@ from django.template.loader import get_template
 
 # Create your views here.
 # el context es para pedir datos a base 
+
+def layout(request):
+ 
+  return render(request, 'social/layout.html')
+
+
 
 def feed(request):
  
@@ -136,4 +146,79 @@ def consultarc(request):
 
 
 
- 
+
+
+def tiendita(request):
+
+  return render(request, 'social/tienda.html')
+
+
+
+def home(request):
+
+  return render(request, 'social/home.html')
+
+
+
+
+
+
+
+
+
+def servi(request):
+  servicios=Servicios.objects.all()
+  return render(request, 'social/servicios.html', {"servicios":servicios})
+
+
+
+def produ(request):
+
+
+  productos=Productos.objects.all()
+
+
+  return render(request, 'social/productos.html', {"productos": productos})
+
+
+
+
+
+
+
+
+
+def agregar_producto(request, producto_id):
+    carro = Carro (request)
+    producto = Productos.objects.get(id=producto_id)
+    carro.agregar(producto=producto)
+    return redirect("productos")
+
+
+
+def eliminar_producto(request, producto_id):
+    carro = Carro(request)
+    producto = Productos.objects.get(id=producto_id)
+    carro.eliminar(producto=producto)
+    return redirect("productos")
+
+def restar_producto(request, producto_id):
+    carro = Carro(request)
+    producto = Productos.objects.get(id=producto_id)
+    carro.restar_producto(producto=producto)
+    return redirect("productos")
+
+def limpiar_carro(request, producto_id):
+    carro = Carro(request)
+    producto= Productos.objects.get(id=producto_id)
+    carro.agregar(producto=producto)
+    return redirect("productos")
+
+
+
+
+
+
+
+
+

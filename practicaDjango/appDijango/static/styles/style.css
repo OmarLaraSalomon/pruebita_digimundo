@@ -80,22 +80,27 @@ a{
 	margin: 5% auto;
 	border-radius: 4px;
 	padding-bottom: 20px;
+
 }
 
 /* NAVIGATION BAR */
 .second-nav{
-	display: flex;
+ 
+	position: relative;
 	padding: 15px 30px;
   
 }
 
 .second-nav .feed{
 	flex: 1 1 30px;
+
 }
 
 .second-nav .feed:hover{
 	flex: 1 1 30px;
 	color: grey;
+  
+ 
 }
 
 .second-nav .profile{
