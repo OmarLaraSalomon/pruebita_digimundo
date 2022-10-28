@@ -26,7 +26,7 @@ urlpatterns = [
     url('^servicio/$' , views.servi, name="servicios"),
     url('^home/$' , views.home, name="home"),
 
-
+    
 
 
 # agregar  producto
@@ -47,7 +47,7 @@ urlpatterns = [
 
 
     url('limpiar/', views.limpiar_carro, name="limpiar"),
- url('eliminar/<str:producto_id>/', views.eliminar_producto, name="eliminar"),
+    url('eliminar/<str:producto_id>/', views.eliminar_producto, name="eliminar"),
 ]
 
 urlpatterns+=static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

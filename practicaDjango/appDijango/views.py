@@ -7,6 +7,8 @@ from .models import Correo
 from .models import Productos
 from .models import Servicios
 from .carro import Carro
+from .models import Pedido
+from .models import LineaPedido
 
 from .forms import UserRegisterForm
 from django.contrib import messages
@@ -15,6 +17,11 @@ from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from django.core.mail import send_mail
 from django.template.loader import get_template
+from django.template.loader import render_to_string
+
+from django.utils.html import strip_tags
+
+from django.core.mail import send_mail
 
 #django nos permite tener forms#
 
@@ -209,6 +216,8 @@ def limpiar_carro(request, producto_id=None):
 
 
 
+
+    
 
 
 

@@ -36,11 +36,14 @@
      
     <a href="{% url 'agregar' value.producto_id %}" class="btn btn-sm btn-success">+</a>
 
-    <a href="{% url 'restar' value.producto_id %}" class="btn btn-sm btn-success">-</a>
-    </td>
+    <a href="{% url 'restar' value.producto_id %}" class="btn btn-sm btn-danger">-</a>
     
-    {{value.precio}} MXN$
+ {{value.precio}} MXN$
+</td>
+    
+   
     </tr>
+
             {% endfor %}
     
         {% else %}
@@ -61,7 +64,19 @@
             <td colspan="3">
                 Total: MXN$ {{importe_total_carro}}
             </td>
+
         </tr>
+        
+<!-- comprobar que la persona tiene la sesion abierta y comprobar que hay articulos en el carro -->
+        {% if request.session.carro.items %} 
+        <tr><td colspan="3" style="text-align: center;">
+
+            <a href="#" class="btn btn-success">Hacer Pedido</a>
+
+        </td></tr>
+        {% endif %}
+
+
     </tfoot>
     
     

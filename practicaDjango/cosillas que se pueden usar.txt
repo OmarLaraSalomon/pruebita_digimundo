@@ -1,0 +1,17 @@
+  <!-- <a href="{% url 'agregar' producto.id %}" class="btn btn-success">Agregar al carrito</a> -->
+
+
+
+
+          <a href="{% url 'agregar' producto.id %}" class="btn btn-success">Agregar al carrito</a>
+
+
+
+
+   <a href="{% url 'agregar' value.producto_id %}" class="btn btn-sm btn-success">+</a>
+    
+     <a href="{% url 'restar' value.producto.id %}" class="btn btn-sm btn-success">-</a>    
+
+
+
+  user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='productos', null=True)

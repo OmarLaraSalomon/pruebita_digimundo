@@ -1,4 +1,5 @@
 from distutils.command.upload import upload
+from email.policy import default
 from tabnanny import verbose
 from django.db import models
 from django.contrib.auth.models import User
@@ -6,6 +7,10 @@ from django.db.models.deletion import CASCADE
 from importlib.resources import contents
 from sqlite3 import Timestamp
 from time import time, timezone
+from django.contrib.auth import get_user_model #devuelve el usuario activo actual
+from django.db.models import F,Sum, FloatField  # para calcular el total de una orden de pedido
+
+
 
 # Create your models here.
 class Post (models.Model):
@@ -87,3 +92,50 @@ class Servicios  (models.Model):
   #salida 
     def __str__(self):
         return self.titulo
+
+
+
+get_user_model()
+
+class Pedido (models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at=models.DateTimeField(auto_now_add=True)
+ #salida 
+    def __str__(self):
+        return self.id
+#la propiedad seria el total, que devuelva el total del pedido que ha hecho el usuario
+    @property
+    def total(self):
+        return self.lineapedido_set.aggregate(
+
+            total=Sum(F("precio")*F("cantidad"), output_field=FloatField())
+
+        )["total"]
+
+
+    class Meta:
+     db_table="pedidos"
+     verbose_name= "pedido"
+     verbose_name_plural= "pedidos"
+     ordering=["id"]
+
+
+class LineaPedido(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    producto=models.ForeignKey(Productos, on_delete=models.CASCADE)
+    pedido= models.ForeignKey(Pedido, on_delete=models.CASCADE)
+    cantidad=models.IntegerField(default=1)
+    created_at=models.DateTimeField(auto_now_add=True)
+
+
+     #salida 
+    def __str__(self):
+        return f'{self.cantidad} unidades de {self.producto.nombre}'
+
+    
+    class Meta:
+      db_table="lineapedidos"
+      verbose_name= "Linea Pedido"
+      verbose_name_plural= "Lineas Pedidos"
+      ordering=["id"]
+

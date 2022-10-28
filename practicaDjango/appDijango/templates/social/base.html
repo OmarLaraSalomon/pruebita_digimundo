@@ -32,7 +32,13 @@
 
 
   <!-- Navbar -->
+  
   <nav class="navbar navbar-expand-lg navbar-dark py-lg-4" id="mainNav">
+    
+    <label for="" class="brand">
+      <a href=""> <img src="{% static 'imgs/logote.png' %}" alt=""></a>
+      
+              </label>
     <div class="container">
       <!-- <a class="navbar-brand text-uppercase text-expanded font-weight-bold d-lg-none" href="home.html">COBRA KAI KARATE</a> -->
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
@@ -40,6 +46,8 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarResponsive">
+
+        
         <ul class="navbar-nav mx-auto">
           <li class="nav-item {% if request.path == '' %} active {% endif %}  px-lg-4">
 
@@ -68,6 +76,9 @@
           <li class="nav-item  px-lg-4">
             <a class="nav-link text-uppercase text-expanded" href="{% url 'logout' %}">
               <h3>Cerrar Sesion</h3>
+
+              
+
   </nav></a>
   </li>
 
