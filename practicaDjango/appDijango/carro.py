@@ -1,4 +1,3 @@
-
 class Carro:
     #iguallar la sesion del usuario con ese carro
     def __init__(self, request):
@@ -77,4 +76,4 @@ class Carro:
 
     def limpiar_carro(self):
         self.session["carro"] = {}
-        self.session.modified = True 
+        self.session.modified = True  
