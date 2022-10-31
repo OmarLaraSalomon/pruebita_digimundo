@@ -187,8 +187,9 @@ def produ(request):
 
   return render(request, 'social/productos.html', {"productos": productos})
 
+
 def agregar_producto(request, producto_id=None):
-    carro = Carro (request)
+    carro = Carro(request)
     producto = Productos.objects.get(id=producto_id)
     carro.agregar(producto=producto)
     return redirect("productos")
@@ -210,12 +211,56 @@ def restar_producto(request, producto_id=None):
 def limpiar_carro(request, producto_id=None):
     carro = Carro(request)
     producto= Productos.objects.get(id=producto_id)
-    carro.agregar(producto=producto)
+    carro.limpiar_carro(producto=producto)
     return redirect("productos")
 
 
 
 
+
+def procesar_pedido(request):
+    pedido=Pedido.objects.create(user=request.user) # damos de alta un pedido
+    carro=Carro(request)  # cogemos el carro
+    lineas_pedido=list()  # lista con los pedidos para recorrer los elementos del carro
+    for key, value in carro.carro.items(): #recorremos el carro con sus items
+        lineas_pedido.append(LineaPedido(
+            producto_id=key,
+            cantidad=value['cantidad'],
+            user=request.user,
+            pedido=pedido                 
+            ))
+
+    LineaPedido.objects.bulk_create(lineas_pedido) # crea registros en BBDD en paquete
+    #enviamos mail al cliente
+    enviar_mail(
+        pedido=pedido,
+        lineas_pedido=lineas_pedido,
+        nombreusuario=request.user.username,
+        email_usuario=request.user.email
+        
+
+    )
+    #mensaje para el futuro
+    messages.success(request, "El pedido se ha creado correctamente")
+    
+    return redirect(' productos')
+    #return redirect('listado_productos')
+    #return render(request, "tienda/tienda.html",{"productos":productos})
+    
+
+def enviar_mail(**kwargs):
+    asunto="Gracias por el pedido"
+    mensaje=render_to_string("social/pedidos.html", {
+        "pedido": kwargs.get("pedido"),
+        "lineas_pedido": kwargs.get("lineas_pedido"),
+        "nombreusuario":kwargs.get("nombreusuario") 
+                       
+        })
+
+    mensaje_texto=strip_tags(mensaje)
+    from_email="weskermexx@gmail.com"
+    to=kwargs.get("email_usuario")
+    send_mail(asunto,mensaje_texto,from_email,[to], html_message=mensaje)
 
     
 

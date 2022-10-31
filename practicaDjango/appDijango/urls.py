@@ -26,7 +26,7 @@ urlpatterns = [
     url('^servicio/$' , views.servi, name="servicios"),
     url('^home/$' , views.home, name="home"),
 
-    
+    path("", views.procesar_pedido, name="procesar_pedido"),
 
 
 # agregar  producto
