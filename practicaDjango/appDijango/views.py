@@ -217,10 +217,9 @@ def limpiar_carro(request, producto_id=None):
 
 
 
-
 def procesar_pedido(request):
     pedido=Pedido.objects.create(user=request.user) # damos de alta un pedido
-    carro=Carro(request)  # cogemos el carro
+    carro=Carro(request)  # llamanos al carro 
     lineas_pedido=list()  # lista con los pedidos para recorrer los elementos del carro
     for key, value in carro.carro.items(): #recorremos el carro con sus items
         lineas_pedido.append(LineaPedido(
@@ -230,20 +229,20 @@ def procesar_pedido(request):
             pedido=pedido                 
             ))
 
-    LineaPedido.objects.bulk_create(lineas_pedido) # crea registros en BBDD en paquete
+    LineaPedido.objects.bulk_create(lineas_pedido) # crea registros en la Base de datos en paquete
     #enviamos mail al cliente
     enviar_mail(
         pedido=pedido,
         lineas_pedido=lineas_pedido,
         nombreusuario=request.user.username,
         email_usuario=request.user.email
-        
-
     )
+
+
     #mensaje para el futuro
     messages.success(request, "El pedido se ha creado correctamente")
     
-    return redirect(' productos')
+    return redirect('social/productos.html')
     #return redirect('listado_productos')
     #return render(request, "tienda/tienda.html",{"productos":productos})
     

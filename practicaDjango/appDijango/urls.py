@@ -25,10 +25,10 @@ urlpatterns = [
     url('^productos/$' , views.produ, name="productos"),
     url('^servicio/$' , views.servi, name="servicios"),
     url('^home/$' , views.home, name="home"),
+  
+    url('procesar_pedido/', views.procesar_pedido, name="procesar_pedido"),
 
-    path("", views.procesar_pedido, name="procesar_pedido"),
-
-
+    path('', views.enviar_mail, name="enviar_email"),
 # agregar  producto
 
   #este checa si exsite
