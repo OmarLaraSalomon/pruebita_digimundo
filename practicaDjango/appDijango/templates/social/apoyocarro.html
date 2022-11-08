@@ -37,13 +37,13 @@
     <a href="{% url 'agregar' value.producto_id %}" class="btn btn-sm btn-success">+</a>
 
     <a href="{% url 'restar' value.producto_id %}" class="btn btn-sm btn-danger">-</a>
-    
+  
  {{value.precio}} MXN$
 </td>
     
-   
+    
     </tr>
-
+   
             {% endfor %}
     
         {% else %}
@@ -63,6 +63,7 @@
         <tr>
             <td colspan="3">
                 Total: MXN$ {{importe_total_carro}}
+                
             </td>
 
         </tr>

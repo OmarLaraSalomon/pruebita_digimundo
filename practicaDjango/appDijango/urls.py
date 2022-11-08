@@ -5,7 +5,8 @@ from django.conf.urls import url
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth.views import LoginView, LogoutView
-
+from django.conf import settings
+from django.conf.urls.static import static
 
 
 urlpatterns = [
@@ -25,10 +26,12 @@ urlpatterns = [
     url('^productos/$' , views.produ, name="productos"),
     url('^servicio/$' , views.servi, name="servicios"),
     url('^home/$' , views.home, name="home"),
-  
+   
     url('procesar_pedido/', views.procesar_pedido, name="procesar_pedido"),
 
     path('', views.enviar_mail, name="enviar_email"),
+
+   
 # agregar  producto
 
   #este checa si exsite
@@ -46,11 +49,14 @@ urlpatterns = [
     path('restar/<str:producto_id>/', views.restar_producto, name="restar"),
 
 
-    url('limpiar/', views.limpiar_carro, name="limpiar"),
-    url('eliminar/<str:producto_id>/', views.eliminar_producto, name="eliminar"),
+
+
+    
+
 ]
 
-urlpatterns+=static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+urlpatterns+=static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) +static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
 
 
 

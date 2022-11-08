@@ -9,6 +9,7 @@ from .models import Servicios
 from .carro import Carro
 from .models import Pedido
 from .models import LineaPedido
+from .models import Noticias
 
 from .forms import UserRegisterForm
 from django.contrib import messages
@@ -153,8 +154,6 @@ def consultarc(request):
 
 
 
-
-
 def tiendita(request):
 
   return render(request, 'social/tienda.html')
@@ -162,13 +161,9 @@ def tiendita(request):
 
 
 def home(request):
-
-  return render(request, 'social/home.html')
-
-
-
-
-
+ noticias=Noticias.objects.all()
+  
+ return render(request, 'social/home.html', {"noticias":noticias})
 
 
 
@@ -176,6 +171,8 @@ def home(request):
 def servi(request):
   servicios=Servicios.objects.all()
   return render(request, 'social/servicios.html', {"servicios":servicios})
+
+
 
 
 
@@ -208,18 +205,29 @@ def restar_producto(request, producto_id=None):
     carro.restar_producto(producto=producto)
     return redirect("productos")
 
-def limpiar_carro(request, producto_id=None):
-    carro = Carro(request)
-    producto= Productos.objects.get(id=producto_id)
-    carro.limpiar_carro(producto=producto)
+
+def limpiar_carro(request):
+
+    carro=Carro(request)
+
+    carro.limpiar_carro()
+
     return redirect("productos")
 
 
 
+def reiniciar(request):
+
+    carro=Carro(request)
+
+    carro.reiniciar()
+
+    return redirect("home")
+
 
 def procesar_pedido(request):
     pedido=Pedido.objects.create(user=request.user) # damos de alta un pedido
-    carro=Carro(request)  # llamanos al carro 
+    carro=Carro(request)  # cogemos el carro
     lineas_pedido=list()  # lista con los pedidos para recorrer los elementos del carro
     for key, value in carro.carro.items(): #recorremos el carro con sus items
         lineas_pedido.append(LineaPedido(
@@ -229,20 +237,25 @@ def procesar_pedido(request):
             pedido=pedido                 
             ))
 
-    LineaPedido.objects.bulk_create(lineas_pedido) # crea registros en la Base de datos en paquete
+    LineaPedido.objects.bulk_create(lineas_pedido) # crea registros en BBDD en paquete
     #enviamos mail al cliente
     enviar_mail(
         pedido=pedido,
         lineas_pedido=lineas_pedido,
         nombreusuario=request.user.username,
         email_usuario=request.user.email
+        
+
     )
+
+    reiniciar(request)
+
 
 
     #mensaje para el futuro
     messages.success(request, "El pedido se ha creado correctamente")
     
-    return redirect('social/productos.html')
+    return redirect('productos')
     #return redirect('listado_productos')
     #return render(request, "tienda/tienda.html",{"productos":productos})
     
@@ -260,8 +273,8 @@ def enviar_mail(**kwargs):
     from_email="weskermexx@gmail.com"
     to=kwargs.get("email_usuario")
     send_mail(asunto,mensaje_texto,from_email,[to], html_message=mensaje)
-
     
+
 
 
 

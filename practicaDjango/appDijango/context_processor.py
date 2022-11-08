@@ -2,6 +2,7 @@
 
 def importe_total_carro(request):
     total = 0
+
     if request.user.is_authenticated:
      #   if request.user.is_superuser == True:
        if "carro" in request.session.keys():

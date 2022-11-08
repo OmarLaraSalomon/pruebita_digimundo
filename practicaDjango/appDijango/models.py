@@ -77,7 +77,7 @@ class Productos (models.Model):
 class Servicios  (models.Model):
     
     titulo = models.CharField(max_length=90)
-    contenido = models.CharField(max_length=90)
+    contenido = models.CharField(max_length=200)
     imagen = models.ImageField(upload_to="servicios", null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     update = models.DateTimeField(auto_now_add=True)
@@ -92,6 +92,33 @@ class Servicios  (models.Model):
   #salida 
     def __str__(self):
         return self.titulo
+
+
+
+
+
+class Noticias  (models.Model):
+    
+    titulo = models.CharField(max_length=90)
+    contenido = models.CharField(max_length=200)
+    imagen = models.ImageField(upload_to="noticias", null=True, blank=True)
+    created = models.DateTimeField(auto_now_add=True)
+    update = models.DateTimeField(auto_now_add=True)
+
+
+    class Meta:
+       
+        verbose_name= "noticia"
+        verbose_name_plural= "noticias"
+    
+    
+  #salida 
+    def __str__(self):
+        return self.titulo
+
+
+
+
 
 
 
