@@ -24,6 +24,15 @@ class NoticiaAdmin(admin.ModelAdmin):
     readonly_fields=("created","update")
 
 
+class LineaAdmin(admin.ModelAdmin):
+    list_display=("id","cantidad",)
+
+
+
+class PedidoAdmin(admin.ModelAdmin):
+    list_display=("id","user",)
+   
+
 
 
 
@@ -35,6 +44,8 @@ admin.site.register(Noticias, NoticiaAdmin)
 
 admin.site.register(Servicios, ServicioAdmin)
 
-admin.site.register([Pedido,LineaPedido])
+admin.site.register(LineaPedido,LineaAdmin)
+
+admin.site.register(Pedido,PedidoAdmin)
 
 
