@@ -1,0 +1,44 @@
+version: "3.8"
+
+services:
+  db_postgres:
+    image: postgres:14
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      # Servicio "db" para la base de datos PostgreSQL
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust  # Configura el método de autenticación de PostgreSQL como "trust" (puede ser inseguro en producción)
+  
+  django_app:
+    build: .
+    command: bash -c "python /code/manage.py migrate && python /code/manage.py runserver 0.0.0.0:8000"
+   
+    volumes:
+      - /code/static
+      - .:/code
+    ports:
+      - 8000:8000
+    depends_on:
+      - db_postgres
+    
+  nginx:
+    container_name: nginx  # Nombre del contenedor
+    restart: always  # Reinicia siempre el contenedor en caso de fallo
+    image: nginx:latest
+    ports:
+      - "5085:5085"
+    volumes:
+      - ./nginx:/etc/nginx/conf.d  # Mapea la carpeta local ./nginx a /etc/nginx/conf.d en el contenedor
+      - /code/static
+    networks:
+        - web_network  # Conecta el contenedor a la red "web_network"
+    depends_on: 
+        - django_app  # Espera a que el servicio "web" esté en funcionamiento antes de iniciar  
+
+networks:
+    web_network:
+      driver: bridge  # Utiliza el driver "bridge" para la red (se comunica con otros contenedores en la misma red)
+
+volumes:
+  .:
+  postgres_data:

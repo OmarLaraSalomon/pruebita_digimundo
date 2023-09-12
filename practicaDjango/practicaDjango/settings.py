@@ -9,9 +9,9 @@ https://docs.djangoproject.com/en/4.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
+import os
 
 from pathlib import Path
-import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -26,8 +26,7 @@ SECRET_KEY = "django-insecure-$w5htx1y*x!6^1@e&p3$ntbp220(tlk7j27t^*(y2ivxcar&s+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['localhost','*']
 
 # Application definition
 
@@ -79,15 +78,18 @@ WSGI_APPLICATION = "practicaDjango.wsgi.application"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
-'default': {
-'ENGINE': 'django.db.backends.postgresql',
-'NAME': 'tesca',
-'USER': 'postgres',
-'PASSWORD': 'tesca123',
-'HOST': '127.0.0.1',
-'PORT': '5432',
+    "default": {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        'HOST': 'db_postgres',
+        'PORT': '5432',
+
+    }
 }
-}
+
+
 
 
 # Password validation
@@ -120,15 +122,17 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = '/code/static'
+
+
 MEDIA_URL = '/media/'
-
-
-
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 LOGIN_REDIRECT_URL = 'feed'
 LOGIN_URL = 'layout'
+
+
 
 #STATIC_ROOT= (os.path.join(BASE_DIR, 'appDjango/static'),) 
 
