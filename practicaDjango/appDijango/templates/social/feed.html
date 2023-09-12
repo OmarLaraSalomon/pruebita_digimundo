@@ -1,0 +1,21 @@
+{% extends 'social/layout.html' %}
+{% load humanize %} 
+{% block content %}
+{% load static %}
+
+
+<article>
+    <div class="container-article">
+        <img src="{% static 'imgs/cobra kai.jpg' %}">
+        <div>
+            <h2 class="username"><a href="#">@Wesker</a></h2>
+            <i class="clock"></i>
+            <time data-time="#">Prueba</time>
+            <div class="post">Hola Wiskas</div>
+        </div>
+    </div>
+</article>
+
+
+
+{% endblock %}
