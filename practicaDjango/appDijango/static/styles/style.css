@@ -1,6 +1,7 @@
 body{
-	background: #ae00ff;
+  background: linear-gradient(rgba(104, 95, 92, 0.65), rgba(104, 95, 92, 0.65)), url("../imgs/fondito.jpg");
 	font-size: 62.5%;
+ 
 	font-family: 'Varela Round', Helvetica, Arial, serif;
 }
 /* Global Styles*/
@@ -39,7 +40,7 @@ img{
 
 /* Nav bar */
 .main-head{
-	background: white;
+	background:rgb(117, 17, 126);
 	color: black;
 }
 
@@ -75,7 +76,7 @@ a{
 
 
 .main{
-	background: white;
+	background: rgb(117, 17, 126);;
 	width: 60%;
 	margin: 5% auto;
 	border-radius: 4px;

@@ -4,120 +4,94 @@
 {% load static %}
 {% block content %} 
 <link href="{% static 'styles/letras.css' %}" rel="stylesheet">
+  
+
    <!-- Heading -->
-   <section class="page-section clearfix">
-    <div class="container">
-      <div class="intro">
+   <body>
+    
+<section class="page-section clearfix">
+  <div class="container">
+    <div class="intro">
         <img class="intro-img img-fluid mb-3 mb-lg-0 rounded" src="{% static 'imgs/cobra kai.jpg' %}"  alt="">
-        <div class="intro-text left-0 text-center bg-faded p-5 rounded">
+      <div class="intro-text left-0 text-center bg-faded p-5 rounded">
           <h2 class="section-heading mb-4" >
             <span class="section-heading-upper">El camino del puño </span>
             <span class="section-heading-lower">Golpea primero, Golpea fuerte, Sin piedad</span>
           </h2>
-          <h2 class="mb-3">En la puertra de tu casa en menos de 48 h con el envío normal. En menos de 24 h con el envío express.
+          <h2 class="mb-3">En la puerta de tu casa en menos de 48h con el envío normal. En menos de 24 h con el envío express.
           </h2>
 
          
-        </div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
 
   
     <!-- Message -->
+  <body>
 
+
+<div class="movimiento">
+  <svg viewBox="0 0 960 300">
+    <symbol id="s-text">
+      <text text-anchor="middle" x="50%" y="80%">Noticias-Cobra Kai</text>
+    </symbol>
+
+    <g class = "g-ants">
+      <use xlink:href="#s-text" class="text-copy"></use>
+      <use xlink:href="#s-text" class="text-copy"></use>
+      <use xlink:href="#s-text" class="text-copy"></use>
+      <use xlink:href="#s-text" class="text-copy"></use>
+      <use xlink:href="#s-text" class="text-copy"></use>
+      <use xlink:href="#s-text" class="text-copy"></use>
+    </g>
+  </svg>
+</div>
+
+  <br>
+  <br>
 <br>
 <br>
 <br>
 <br>
-<div class="container">
+ 
+ <!-- Carousel wrapper
+Si estás utilizando Bootstrap normal (sin la versión MDB), deberías utilizar el atributo data-ride="carousel"en lugar de data-mdb-ride="carousel" -->
+<div id="carouselMaterialStyle" class="carousel slide carousel-fade" data-ride="carousel">
+  <!-- Indicators -->
+  
+  <!-- Inner -->
+  <div class="carousel-inner rounded-5 shadow-lg p-3 mb-5 bg-white rounded border">
+    {% for noticia in noticias %}
+    <!-- Single item -->
+    <div class="carousel-item {% if forloop.first %}active{% endif %}">
+      <img src="{{noticia.imagen.url}}" class="d-block w-100">
+      <div class="carousel-caption ">
+        <h5>{{noticia.titulo}}</h5>
+        <p>{{noticia.contenido}}</p>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  <!-- Controls -->
+  <button class="carousel-control-prev" type="button" data-target="#carouselMaterialStyle" data-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-target="#carouselMaterialStyle" data-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
+<!-- Carousel wrapper -->
+  
 
  
-
-  <h2><a href="">
-   NOTICIAS SOBRE COBRA KAI, TIENES QUE VERLAS 
-  </a></h2>
-
-
-
-</div>
-<div id="myCarousel" class="carousel slide" data-ride="carousel">
-  <!-- Indicators -->
-  <ol class="carousel-indicators">
-      <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-      <li data-target="#myCarousel" data-slide-to="1"></li>
-      <li data-target="#myCarousel" data-slide-to="2"></li>
-  </ol>
-
-  <!-- Wrapper for slides -->
-  <div class="carousel-inner">
-    {% for noticia in noticias %} 
-      <div class="carousel-item
-
-        {% if forloop.first %}
-        active
-      {% endif %}
-      ">
-          <!-- <img src="{% static 'img/icons/vision.png' %}" class="caja-icono"> -->
-          <img src="{{noticia.imagen.url}}" width="600px" height="600px" alt="">
-          <div class="carousel-caption">
-              
-  <h2 style="color: white;">{{noticia.titulo}}</h2>
-  <p style="color: white;">{{noticia.contenido}}</p>
-          </div>
-      </div>
-      {% endfor %} 
-
-<!-- 
-      <div class="item">
-          <img src="{% static 'imgs/trio.jpg' %}"  width="1000px" height="1000px" alt="">
-          <div class="carousel-caption">
-              <h3>Segundo Slide</h3>
-              <p>est es la imgen dos</p>
-          </div>
-      </div>
-      
-      <div class="item">
-          <img src="{% static 'imgs/deker.jpg' %}"width="1000px" height="1000px" alt="">
-          <div class="carousel-caption">
-              <h3>Tercer Slide</h3>
-              <p>esta es la imagen tres</p>
-          </div>
-      </div>
-  </div> -->
-
-  <!-- Controls -->
-  <a class="left carousel-control" href="#myCarousel" data-slide="prev">
-      <span class="glyphicon glyphicon-chevron-left"></span>
-      <span class="sr-only">Previous</span>
-  </a>
-  <a class="right carousel-control" href="#myCarousel" data-slide="next">
-      <span class="glyphicon glyphicon-chevron-right"></span>
-      <span class="sr-only">Next</span>
-  </a>
-</div>
-
-
-
-<script type="text/javascript">
-// Call carousel manually
-$('#myCarouselCustom').carousel();
-
-// Go to the previous item
-$("#prevBtn").click(function(){
-    $("#myCarouselCustom").carousel("prev");
-});
-// Go to the previous item
-$("#nextBtn").click(function(){
-    $("#myCarouselCustom").carousel("next");
-});
-</script>
-
-
-  
-<br>
-
+ 
+    
+  <br>
 
 
     <section class="page-section cta">
@@ -129,11 +103,12 @@ $("#nextBtn").click(function(){
                 <span class="section-heading-upper">Hola amigos</span>
                 <span class="section-heading-lower">WeskerMexx</span>
               </h2>
-              <p class="mb-0">Hola hermos@,soy WeskerMexx😈, un humilde streamer que sueña con ser uno de los grandes. Tengo el don de decir cosas random y estupidas . 💖.</p>
+              <h3 class="mb-0">Saludos queridos visitantes de la pagina web,soy WeskerMexx😈, un humilde porgrmador que sueña con ser uno de los grandes. Tengo el don de decir cosas random y estupidas . 💖.</h3>
             </div>
           </div>
         </div>
       </div>
     </section> 
+ 
 
     {% endblock %}

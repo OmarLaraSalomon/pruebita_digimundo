@@ -152,12 +152,18 @@ class LineaPedido(models.Model):
     producto=models.ForeignKey(Productos, on_delete=models.CASCADE)
     pedido= models.ForeignKey(Pedido, on_delete=models.CASCADE)
     cantidad=models.IntegerField(default=1)
+    precio = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)  # Agrega un campo de precio
     created_at=models.DateTimeField(auto_now_add=True)
 
 
-     #salida 
+     #salida  esta es vlaidacion si es una unidad mostrara unidad si son mas sera unidades 
     def __str__(self):
-        return f'{self.cantidad} unidades de {self.producto.nombre}'
+        if self.cantidad == 1:
+            cantidad_str = "1 unidad"
+        else:
+            cantidad_str = f"{self.cantidad} unidades"
+        return f'{cantidad_str} de {self.producto.nombre} con precio de {self.producto.precio}'
+       
 
     
     class Meta:

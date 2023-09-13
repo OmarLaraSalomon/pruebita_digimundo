@@ -2,6 +2,10 @@
 from multiprocessing import context
 from django.shortcuts import render, redirect
 from .models import *
+from django.contrib import messages
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+from django.core.mail import send_mail
 from .models import Post
 from .models import Correo
 from .models import Productos
@@ -19,11 +23,12 @@ from django.conf import settings
 from django.core.mail import send_mail
 from django.template.loader import get_template
 from django.template.loader import render_to_string
-
+import smtplib
+from email.message import EmailMessage
 from django.utils.html import strip_tags
-
+from django.db.models import Sum, F, FloatField
 from django.core.mail import send_mail
-
+from decimal import Decimal  # Importa Decimal para manejar valores monetarios
 #django nos permite tener forms#
 
 
@@ -225,37 +230,49 @@ def reiniciar(request):
     return redirect("home")
 
 
-def procesar_pedido(request):
-    pedido=Pedido.objects.create(user=request.user) # damos de alta un pedido
-    carro=Carro(request)  # cogemos el carro
-    lineas_pedido=list()  # lista con los pedidos para recorrer los elementos del carro
-    for key, value in carro.carro.items(): #recorremos el carro con sus items
-        lineas_pedido.append(LineaPedido(
-            producto_id=key,
-            cantidad=value['cantidad'],
-            user=request.user,
-            pedido=pedido                 
-            ))
 
-    LineaPedido.objects.bulk_create(lineas_pedido) # crea registros en BBDD en paquete
-    #enviamos mail al cliente
+def procesar_pedido(request):
+ 
+    pedido = Pedido.objects.create(user=request.user)  # damos de alta un pedido
+    carro = Carro(request)  # cogemos el carro
+    lineas_pedido = list()  # lista con los pedidos para recorrer los elementos del carro
+    
+    # Calcula el importe total del carrito
+  
+
+    for key, value in carro.carro.items():  # recorremos el carro con sus items
+        producto = Productos.objects.get(id=key)
+        cantidad = value['cantidad']
+        precio_producto = producto.precio  # Obtén el precio del producto
+
+        lineas_pedido.append(LineaPedido(
+            producto=producto,
+            cantidad=cantidad,
+            user=request.user,
+            pedido=pedido,
+            precio=precio_producto  # Asigna el precio del producto
+        ))
+
+    LineaPedido.objects.bulk_create(lineas_pedido)  # crea registros en BBDD en paquete
+
+
+
+    # Envía el correo electrónico y pasa el total como argumento
     enviar_mail(
         pedido=pedido,
         lineas_pedido=lineas_pedido,
         nombreusuario=request.user.username,
         email_usuario=request.user.email
-        
-
+      
     )
 
     reiniciar(request)
 
-
-
-    #mensaje para el futuro
+    # mensaje para el futuro
     messages.success(request, "El pedido se ha creado correctamente")
-    
+
     return redirect('productos')
+
     #return redirect('listado_productos')
     #return render(request, "tienda/tienda.html",{"productos":productos})
     
@@ -265,17 +282,15 @@ def enviar_mail(**kwargs):
     mensaje=render_to_string("social/pedidos.html", {
         "pedido": kwargs.get("pedido"),
         "lineas_pedido": kwargs.get("lineas_pedido"),
-        "nombreusuario":kwargs.get("nombreusuario") 
-                       
+        "nombreusuario":kwargs.get("nombreusuario"),
+        "email_usuario":kwargs.get("email_usuario"),
+                            
         })
 
     mensaje_texto=strip_tags(mensaje)
     from_email="weskermexx@gmail.com"
     to=kwargs.get("email_usuario")
     send_mail(asunto,mensaje_texto,from_email,[to], html_message=mensaje)
-    
-
-
 
 
 

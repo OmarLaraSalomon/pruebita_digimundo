@@ -9,45 +9,27 @@
     <div style="float:right">
 
 {% include 'social/apoyocarro.html' %}
+<br>
 
-    </div>
-
- <div class="row">
-
-
-{% for producto in productos %}
-
-<div class="col-md-3">
-
-  <div class="card" style="width: 100%; margin: 5px 5px;">
-
-        <img src="{{producto.imagen.url}}" class="card-img-top"> 
-
-       <div class="card-body" style="text-align:center ;">
-
-             <h7  class= "card-title">{{producto.nombre}}</h7>
-              <p  class= "card-title" >&nbsp; MXN$ {{producto.precio}} </p>
-
-        </div>
-
-        <div class="card-footer text-center">
-          <a href="{% url 'agregar' producto.id %}" class="btn btn-success">Agregar al carrito</a>
-        </div>
-    </div>
-
-
+<div class="container mt-4">
+  <div class="row justify-content-center">
+      {% for producto in productos %}
+      <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+          <div class="card border-success mb-3" style="background-color: #f7f7f7; border: 5px solid #ddd;">
+              <img src="{{ producto.imagen.url }}" class="card-img-top" alt="{{ producto.nombre }}" style="max-height: 150px; object-fit: contain;">
+              <div class="card-body text-center">
+                  <h5 class="card-title" style="color: #333;">{{ producto.nombre }}</h5>
+                  <p class="card-text" style="color: #333;">$ {{ producto.precio }}</p>
+                 
+                  <div class="card-footer text-center">
+                    <a href="{% url 'agregar' producto.id %}" class="btn btn-success">Agregar al carrito</a>
+                  </div>
+              </div>
+          </div>
+      </div>
+      {% endfor %}
   </div>
-  
-  
-
-  {% endfor %} 
-
-
 </div>
-
-
-</div>
-
 
 
     

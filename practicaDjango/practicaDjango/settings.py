@@ -91,7 +91,6 @@ DATABASES = {
 
 
 
-
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
 
@@ -142,9 +141,11 @@ LOGIN_URL = 'layout'
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
-EMAIL_HOST = 'smtp.gmail.com'
+#EMAIL_HOST_USER = os.environ.get('weskermexx@gmail.com')  # Usa una variable de entorno para el correo
+#EMAIL_HOST_PASSWORD = os.environ.get('gnxkumlghayjwath')  # Usa una variable de entorno para la contraseña
 EMAIL_HOST_USER = 'weskermexx@gmail.com'
-EMAIL_HOST_PASSWORD = 'rcgivxlxsbnfylno'
-EMAIL_PORT = 587
+EMAIL_HOST_PASSWORD = 'gnxkumlghayjwath'
