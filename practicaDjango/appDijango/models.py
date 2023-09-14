@@ -10,7 +10,12 @@ from time import time, timezone
 from django.contrib.auth import get_user_model #devuelve el usuario activo actual
 from django.db.models import F,Sum, FloatField  # para calcular el total de una orden de pedido
 
+class Profile(models.Model):
+	user = models.OneToOneField(User, on_delete=models.CASCADE)
+	image = models.ImageField(default='../appDijango/static/imgs/logo.jpg')
 
+	def __str__(self):
+		return f'Perfil de {self.user.username}'
 
 # Create your models here.
 class Post (models.Model):

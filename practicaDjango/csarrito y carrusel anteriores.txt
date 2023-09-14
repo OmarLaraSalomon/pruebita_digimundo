@@ -1,0 +1,117 @@
+----------CARRUSEL---------------------------
+
+  <div id="myCarousel" class="carousel slide " data-bs-ride="carousel">
+    <!-- Indicators -->
+    <style>
+        .carousel-inner img {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+    <!-- Wrapper for slides -->
+    <div class="carousel-inner">
+        {% for noticia in noticias %}
+        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+            <!-- <img src="{% static 'img/icons/vision.png' %}" class="caja-icono"> -->
+            <img src="{{noticia.imagen.url}}" class="d-block w-100">
+            <div class="carousel-caption">
+                <h2 style="color: white;">{{noticia.titulo}}</h2>
+                <p style="color: white;">{{noticia.contenido}}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <!-- Controls -->
+    <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+        <span class="glyphicon glyphicon-chevron-left"></span>
+        <span class="sr-only">Previous</span>
+    </a>
+    <a class="right carousel-control" href="#myCarousel" data-slide="next">
+        <span class="glyphicon glyphicon-chevron-right"></span>
+        <span class="sr-only">Next</span>
+    </a>
+</div>
+  
+  
+  
+  <script type="text/javascript">
+  // Call carousel manually
+  $('#myCarouselCustom').carousel();
+  
+  // Go to the previous item
+  $("#prevBtn").click(function(){
+      $("#myCarouselCustom").carousel("prev");
+  });
+  // Go to the previous item
+  $("#nextBtn").click(function(){
+      $("#myCarouselCustom").carousel("next");
+  });
+  </script>
+
+
+
+-------------CARRITO-------------
+
+
+
+{% extends 'social/base.html' %}
+
+{% load static %}
+{% block content %} 
+
+<div class="container">
+
+    <div style="float:right">
+
+{% include 'social/apoyocarro.html' %}
+
+    </div>
+
+ <div class="row">
+
+
+{% for producto in productos %}
+
+<div class="col-md-3">
+
+  <div class="card" style="width: 100%; margin: 5px 5px;">
+
+        <img src="{{producto.imagen.url}}" class="card-img-top"> 
+
+       <div class="card-body" style="text-align:center ;">
+
+             <h7  class= "card-title">{{producto.nombre}}</h7>
+              <p  class= "card-title" >&nbsp; MXN$ {{producto.precio}} </p>
+
+        </div>
+
+        <div class="card-footer text-center">
+          <a href="{% url 'agregar' producto.id %}" class="btn btn-success">Agregar al carrito</a>
+        </div>
+    </div>
+
+
+  </div>
+  
+  
+
+  {% endfor %} 
+
+
+</div>
+
+
+</div>
+
+
+
+    
+
+
+
+
+
+{% endblock %}
+
+
+

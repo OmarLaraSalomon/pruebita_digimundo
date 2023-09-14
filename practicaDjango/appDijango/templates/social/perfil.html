@@ -4,11 +4,11 @@
 
 <!-- Profile -->
 <div class="profile">
-	<img src="{% static 'imgs/cobra kai.jpg' %}">
-	<h2>@Wesker</h2>
+	<img src="{{ user.profile.image.url }}"> 
+	<h2>@{{ user.username }}</h2>
 
 	
-			<button><a class="follow-button" href="#">Follow</a></button>
+		<!--	<button><a class="follow-button" href="#">Follow</a></button>-->
 	
 			
 	
@@ -16,7 +16,7 @@
 
 <!-- Follow items -->
 <div class="follow">
-	<div>
+	<!--<div>
 		<h5>Post</h5>
 		
 	</div>
@@ -28,7 +28,7 @@
 	<div>
 		<h5>Following</h5>
 	
-	</div>
+	</div>-->
 </div>
 
 

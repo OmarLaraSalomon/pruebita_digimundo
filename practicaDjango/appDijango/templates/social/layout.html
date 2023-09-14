@@ -16,7 +16,7 @@
 
 	<header class="main-head">
 		<nav class="main">
-			<h1 id="logo">Bienvenido</h1>
+			<h1 id="logo">BIENVENIDO</h1>
 			<ul>
 
 				{% if request.user.is_authenticated %}
@@ -33,13 +33,6 @@
 
 
 	
-	{% if messages %}
-		{% for message in messages %}
-		<div class="notification {{ message.tags}}">
-			{{ message }}
-		</div>
-		{% endfor %}
-	{% endif %}
 	
 
 	<!-------------------------------------
@@ -66,14 +59,25 @@
 		{% else %}
 
 
-		<a class="feed" href="{% url 'feed' %}">Inicio</a>
-		&nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp;
-			
-		<a class="profile" href="{% url 'perfil' %}">Mi Perfil</a>
-		&nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp;
 		
-		<a class="home" href="{% url 'home' %}">tiendita</a>
+			
+	
+		
+		<a class="home" href="{% url 'feed' %}">Inicio</a>
 		&nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp;
+
+	
+
+
+		<a class="home" href="{% url 'home' %}">Tienda</a>
+		&nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp;
+
+		
+
+		<a class="home" href="{% url 'perfil' %}">Perfil</a>
+		&nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp;
+
+		
 
 		<a class="correo" href="{% url 'mandarcorreo' %}">Contactanos</a>
 		&nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp;
@@ -103,11 +107,52 @@
 	</div>
 
 	<footer>
-		<div class="row">
+
+
+		
+		 <div class="row">
 			
-			<h1>SALUDOS AMIGOS</h1>
+			{% if request.user.is_authenticated %}
+
+
+
+			<h1>Ya estas logeado :) </h1>
+			{% else %}
+
+			<h1 color: red>DEBES DE LOGEARTE PARA ACCEDER </h1>
+			
+			{% endif %} 
+
+
+				{% if messages %}
+	<div class="alert
+	 {% if request.user.is_authenticated %}alert-success{% else %}alert-info{% endif %}">
+		{% for message in messages %}
+			{{ message }}
+		{% endfor %}
+	</div>
+	{% endif %}
+
+
+
 		</div>
+
+
+
 	</footer>
+
+	<style>
+		.alert-success {
+			background-color: #4CAF50; /* Verde */
+			color: white;
+		}
+		
+		.alert-info {
+			background-color: red; /* Azul */
+			color: white;
+			font-size: 30px;
+		}
+	</style>
 
 </body>
 </html>

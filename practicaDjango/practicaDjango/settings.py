@@ -31,6 +31,7 @@ ALLOWED_HOSTS = ['localhost','*']
 # Application definition
 
 INSTALLED_APPS = [
+ 
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -49,6 +50,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
 ]
 
 ROOT_URLCONF = "practicaDjango.urls"
@@ -128,9 +130,9 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-LOGIN_REDIRECT_URL = 'feed'
+LOGIN_REDIRECT_URL = 'productos' #indica que después de iniciar sesión exitosamente, el usuario será redirigido a la URL llamada
 LOGIN_URL = 'layout'
-
+#ndica la URL a la que se redirigirá al usuario si intenta acceder a una vista protegida sin estar autenticado.
 
 
 #STATIC_ROOT= (os.path.join(BASE_DIR, 'appDjango/static'),) 

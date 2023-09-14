@@ -4,12 +4,27 @@
 {% load static %}
 {% block content %} 
 
+{% for message in messages %}
+<div class="alert alert-success role=alert{{ message.tags }}">
+    <h4 class="alert-heading">Pedido procesado</h4>
+   
+    <p>{{ message }}</p>
+    <hr style="height:2px;border-width:0;color:gray;background-color:green">
+<p class="mb-0"> Gracias por visitar nuestra página web. Espero que su estadia haya sido agradable :)</p>
+</div>
+<br>
+<br>
+{% endfor %}
+
+
+
 <div class="container">
 
     <div style="float:right">
 
 {% include 'social/apoyocarro.html' %}
 <br>
+
 
 <div class="container mt-4">
   <div class="row justify-content-center">
@@ -30,12 +45,6 @@
       {% endfor %}
   </div>
 </div>
-
-
-    
-
-
-
 
 
 {% endblock %}

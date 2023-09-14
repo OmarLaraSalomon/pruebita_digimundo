@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import CategoriaProd, Productos, Servicios, Pedido, LineaPedido, Noticias
+from .models import CategoriaProd, Productos, Servicios, Pedido, LineaPedido, Noticias, Profile
 # Register your models here.
 
 class CategoriaProdAdmin(admin.ModelAdmin):
@@ -7,11 +7,13 @@ class CategoriaProdAdmin(admin.ModelAdmin):
     readonly_fields=("created","update")
 
 
+
+
 class ProductoAdmin(admin.ModelAdmin):
 
     readonly_fields=("created","update")
 
-   
+
 
 class ServicioAdmin(admin.ModelAdmin):
 
@@ -31,7 +33,7 @@ class LineaAdmin(admin.ModelAdmin):
 
 class PedidoAdmin(admin.ModelAdmin):
     list_display=("id","user",)
-   
+
 
 
 
@@ -47,5 +49,9 @@ admin.site.register(Servicios, ServicioAdmin)
 admin.site.register(LineaPedido,LineaAdmin)
 
 admin.site.register(Pedido,PedidoAdmin)
+
+admin.site.register(Profile)
+
+
 
 

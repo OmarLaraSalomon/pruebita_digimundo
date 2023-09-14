@@ -56,11 +56,9 @@ class Carro:
         self.session.modified=True
 
 
-
     def reiniciar(self):
 
         carro=self.session["carro"]={}
-       
         self.carro=carro
         #carro =[]
         #self.carro=[]

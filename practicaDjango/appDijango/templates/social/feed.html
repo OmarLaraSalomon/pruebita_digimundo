@@ -3,15 +3,13 @@
 {% block content %}
 {% load static %}
 
-
 <article>
     <div class="container-article">
-        <img src="{% static 'imgs/cobra kai.jpg' %}">
+       <img src="{{ user.profile.image.url }}"> 
         <div>
-            <h2 class="username"><a href="#">@Wesker</a></h2>
+            <h2 class="username">@{{ user.username }}</h2>
             <i class="clock"></i>
-            <time data-time="#">Prueba</time>
-            <div class="post">Hola Wiskas</div>
+     
         </div>
     </div>
 </article>

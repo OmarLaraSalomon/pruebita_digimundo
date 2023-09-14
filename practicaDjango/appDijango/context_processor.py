@@ -8,7 +8,7 @@ def importe_total_carro(request):
        if "carro" in request.session.keys():
         for key, value in request.session["carro"].items():
                 total=total+ float(value["precio"])
-    return {"importe_total_carro": total} 
+    return {"importe_total_carro": total } 
 
 
 

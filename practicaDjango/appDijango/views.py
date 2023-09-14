@@ -32,11 +32,19 @@ from decimal import Decimal  # Importa Decimal para manejar valores monetarios
 #django nos permite tener forms#
 
 
+from .context_processor import importe_total_carro
 # Create your views here.
+
 # el context es para pedir datos a base 
 
 def layout(request):
- 
+
+  if request.user.is_authenticated:
+        messages.success(request, "¡Bienvenido de nuevo!")
+  else:
+        messages.error(request, "Inicia sesión para acceder a todas las funciones.")
+    
+  
   return render(request, 'social/layout.html')
 
 
@@ -179,13 +187,14 @@ def servi(request):
 
 
 
-
-
+@login_required
 def produ(request):
-
 
   productos=Productos.objects.all()
 
+  if not request.user.is_authenticated:
+        messages.warning(request, "Debes estar logueado para acceder a esta página.")
+        return redirect('feed')  # Redirige a la página de inicio de sesión
 
   return render(request, 'social/productos.html', {"productos": productos})
 
@@ -250,10 +259,12 @@ def procesar_pedido(request):
             cantidad=cantidad,
             user=request.user,
             pedido=pedido,
-            precio=precio_producto  # Asigna el precio del producto
+            precio=precio_producto # Asigna el precio del producto
+       
         ))
 
     LineaPedido.objects.bulk_create(lineas_pedido)  # crea registros en BBDD en paquete
+    total_pedido = importe_total_carro(request)  # Calcula el total del pedido antes de llamar a enviar_mail
 
 
 
@@ -262,14 +273,15 @@ def procesar_pedido(request):
         pedido=pedido,
         lineas_pedido=lineas_pedido,
         nombreusuario=request.user.username,
-        email_usuario=request.user.email
+        email_usuario=request.user.email,
+        total_pedido=total_pedido  # Pasa el total del pedido al contexto
       
     )
 
     reiniciar(request)
 
     # mensaje para el futuro
-    messages.success(request, "El pedido se ha creado correctamente")
+    messages.success(request, "El pedido se ha realizado correctamente")
 
     return redirect('productos')
 
@@ -279,11 +291,14 @@ def procesar_pedido(request):
 
 def enviar_mail(**kwargs):
     asunto="Gracias por el pedido"
+       # Calcula el total del pedido aquí (supongamos que ya tienes el valor total_pedido)
+    total_pedido = kwargs.get("total_pedido")
     mensaje=render_to_string("social/pedidos.html", {
         "pedido": kwargs.get("pedido"),
         "lineas_pedido": kwargs.get("lineas_pedido"),
         "nombreusuario":kwargs.get("nombreusuario"),
         "email_usuario":kwargs.get("email_usuario"),
+        "total_pedido": kwargs.get("total_pedido")  # Agrega el total del pedido al contexto
                             
         })
 
