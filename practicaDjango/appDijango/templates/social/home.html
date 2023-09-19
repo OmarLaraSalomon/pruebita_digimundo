@@ -57,18 +57,15 @@
 <br>
 <br>
  
- <!-- Carousel wrapper
-Si estás utilizando Bootstrap normal (sin la versión MDB), deberías utilizar el atributo data-ride="carousel"en lugar de data-mdb-ride="carousel" -->
+<!-- Carousel wrapper -->
 <div id="carouselMaterialStyle" class="carousel slide carousel-fade" data-ride="carousel">
-  <!-- Indicators -->
-  
   <!-- Inner -->
   <div class="carousel-inner rounded-5 shadow-lg p-3 mb-5 bg-white rounded border">
     {% for noticia in noticias %}
     <!-- Single item -->
     <div class="carousel-item {% if forloop.first %}active{% endif %}">
-      <img src="{{noticia.imagen.url}}" class="d-block w-100">
-      <div class="carousel-caption ">
+      <img src="{{noticia.imagen.url}}" class="d-block w-100 img-fluid" alt="{{noticia.titulo}}">
+      <div class="carousel-caption">
         <h5>{{noticia.titulo}}</h5>
         <p>{{noticia.contenido}}</p>
       </div>
@@ -85,11 +82,9 @@ Si estás utilizando Bootstrap normal (sin la versión MDB), deberías utilizar 
     <span class="visually-hidden">Next</span>
   </button>
 </div>
-<!-- Carousel wrapper -->
   
 
- 
- 
+
     
   <br>
 

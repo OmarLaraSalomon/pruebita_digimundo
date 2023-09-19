@@ -1,7 +1,10 @@
 from distutils.command.upload import upload
 from email.policy import default
+from django.utils import timezone
 from tabnanny import verbose
 from django.db import models
+from django.utils import timezone
+
 from django.contrib.auth.models import User
 from django.db.models.deletion import CASCADE
 from importlib.resources import contents
@@ -31,6 +34,27 @@ class Post (models.Model):
     puesto = models.CharField(max_length=250, null=True)
     departamento = models.CharField(max_length=250, null=True)
     is_leader = models.BooleanField(default=False,null=True)
+
+
+#/class DatosA(models.Model):
+    #user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='datosA')
+    #correo_electronico = models. EmailField(max_length=254)
+    #password1 = models.CharField(max_length=50)
+    #password2 = models.CharField(max_length=50)
+    #telefono = models.CharField(max_length=100)
+    #direccion = models.CharField(max_length=100)
+    #timestamp = models.DateTimeField(default=timezone.now)
+    #content = models.TextField()
+    
+    #class Meta: #como queremos que se comporte
+    #    ordering=['-timestamp'] #me s crea en orden ascendente 
+        
+   # def __str__(self): #con este indetificamos 
+  #      return f'{self.user.username} ha actualizado su correo por {self.correo_electronico} con cambio de contraseña a {self.password2} y cambio de celular por{self.telefono} usando como referencia {self.direccion}'
+
+        
+        
+    
 
 
 class Correo (models.Model):
@@ -167,7 +191,7 @@ class LineaPedido(models.Model):
             cantidad_str = "1 unidad"
         else:
             cantidad_str = f"{self.cantidad} unidades"
-        return f'{cantidad_str} de {self.producto.nombre} con precio de {self.producto.precio}'
+        return f'{cantidad_str} de {self.producto.nombre} con precio de MXN${self.producto.precio}0'
        
 
     

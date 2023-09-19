@@ -1,38 +1,4 @@
 
-@font-face {
-    font-family: 'Monoton';
-    font-style: normal;
-    font-weight: 400;
-    src: local('Monoton'), local('Monoton-Regular'), url(http://themes.googleusercontent.com/static/fonts/monoton/v4/AKI-lyzyNHXByGHeOcds_w.woff) format('woff');
-  }
-  
-  @font-face {
-    font-family: 'Iceland';
-    font-style: normal;
-    font-weight: 400;
-    src: local('Iceland'), local('Iceland-Regular'), url(http://themes.googleusercontent.com/static/fonts/iceland/v3/F6LYTZLHrG9BNYXRjU7RSw.woff) format('woff');
-  }
-  
-  @font-face {
-    font-family: 'Pacifico';
-    font-style: normal;
-    font-weight: 400;
-    src: local('Pacifico Regular'), local('Pacifico-Regular'), url(http://themes.googleusercontent.com/static/fonts/pacifico/v5/yunJt0R8tCvMyj_V4xSjafesZW2xOQ-xsNqO47m55DA.woff) format('woff');
-  }
-  
-  @font-face {
-    font-family: 'Audiowide';
-    font-style: normal;
-    font-weight: 400;
-    src: local('Audiowide'), local('Audiowide-Regular'), url(http://themes.googleusercontent.com/static/fonts/audiowide/v2/8XtYtNKEyyZh481XVWfVOj8E0i7KZn-EPnyo3HZu7kw.woff) format('woff');
-  }
-  
-  @font-face {
-    font-family: 'Vampiro One';
-    font-style: normal;
-    font-weight: 400;
-    src: local('Vampiro One'), local('VampiroOne-Regular'), url(http://themes.googleusercontent.com/static/fonts/vampiroone/v3/Ho2Xld8UbQyBA8XLxF1_NYbN6UDyHWBl620a-IRfuBk.woff) format('woff');
-  }
   
   body{
     background-color: #222222;
@@ -40,7 +6,7 @@
   /*neon effect*/
   h2{
     text-align:center;
-    font-size:3em;
+    font-size:2em;
     margin:20px 0 20px 0;
   }
 
@@ -58,56 +24,6 @@
     transition: all 0.5s;
   }
   
-  h2:nth-child(1) a{
-    color:#FF1177;
-    font-family:Monoton;
-  }
-  h2:nth-child(1) a:hover{
-    -webkit-animation: neon1 1.5s ease-in-out infinite alternate;
-    -moz-animation: neon1 1.5s ease-in-out infinite alternate;
-    animation: neon1 1.5s ease-in-out infinite alternate;
-  }
-  
-  h2:nth-child(2) a{
-    font-size:1.5em;
-    color:#228DFF;
-    font-family:Iceland;
-  }
-  h2:nth-child(2) a:hover{
-    -webkit-animation: neon2 1.5s ease-in-out infinite alternate;
-    -moz-animation: neon2 1.5s ease-in-out infinite alternate;
-    animation: neon2 1.5s ease-in-out infinite alternate;
-  }
-  
-  h2:nth-child(3) a{
-    color:#FFDD1B;
-    font-family:Audiowide;
-  }
-  h2:nth-child(3) a:hover{
-    -webkit-animation: neon3 1.5s ease-in-out infinite alternate;
-    -moz-animation: neon3 1.5s ease-in-out infinite alternate;
-    animation: neon3 1.5s ease-in-out infinite alternate;
-  }
-  
-  h2:nth-child(4) a{
-    color:#FF9900;
-    font-family:Pacifico;
-  }
-  h2:nth-child(4) a:hover{
-    -webkit-animation: neon4 1.5s ease-in-out infinite alternate;
-    -moz-animation: neon4 1.5s ease-in-out infinite alternate;
-    animation: neon4 1.5s ease-in-out infinite alternate;
-  }
-  
-  h2:nth-child(5) a{
-    color:#BA01FF;
-    font-family:Vampiro One;
-  }
-  h2:nth-child(5) a:hover{
-    -webkit-animation: neon5 1.5s ease-in-out infinite alternate;
-    -moz-animation: neon5 1.5s ease-in-out infinite alternate;
-    animation: neon5 1.5s ease-in-out infinite alternate;
-  }
   
   p a:hover{
   color:#ffffff;
@@ -125,26 +41,26 @@ img{
 }
 
 p{
-  font-size: 34px;
+  font-size: 1.5em;
   font-weight: bold;
   font-style: italic;
   font-variant: small-caps;
   font-family: monospace;
   text-transform: capitalize;
-  letter-spacing: 4px;
+  letter-spacing: 0.1px;
   color: #b80935;
   text-align:center;
-  word-spacing: 8px
+  word-spacing: 2px
 }
 
 h5{
-  font-size: 45px;
+  font-size: 2em;
   font-family: Roboto;
   font-weight: bold;
   font-style: italic;
   text-transform: uppercase;
   text-decoration: underline;
-  letter-spacing: 6px;
+  letter-spacing: 0.1px;
   color: #4416c4;
   
 }

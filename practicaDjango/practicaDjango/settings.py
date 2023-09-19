@@ -31,7 +31,6 @@ ALLOWED_HOSTS = ['localhost','*']
 # Application definition
 
 INSTALLED_APPS = [
- 
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -58,7 +57,7 @@ ROOT_URLCONF = "practicaDjango.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        'DIRS': [BASE_DIR / 'templates/social'], #esta es la ruta donde me cargaran los templates de djkangp
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [

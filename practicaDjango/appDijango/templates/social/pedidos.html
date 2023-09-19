@@ -13,12 +13,18 @@
     
      Hola {{nombreusuario}}, esté es un detalle de tu compra<br>
      Nº de pedido: {{pedido.id}}<br>
-     El importe final {{  total_pedido }}<br>
+     {{  total_pedido }}<br>
      Email del usuario: {{email_usuario}}<br>
      <br>
      <br>
-     Artitculos solicitados: {{lineas_pedido}}<br>
+     {% for linea_pedido in lineas_pedido %}
+     <p>{{ linea_pedido }}</p>
+     <br> <!-- Agregar un salto de línea después de cada artículo -->
+    {% endfor %}
      
+    <br> 
+    <hr>
+    {{  total_pedido }}
     
     
 	

@@ -1,0 +1,41 @@
+
+<div class="row mt-3 justify-content-center " >
+    <nav>
+        <ul class="pagination pagination-lg horizontal-pagination"id="alinear"> <!--lista desordenafa-->
+            {% if productos.has_previous %} <!--si productos tiene productos anteirores entonces mandarlos a la anteiror-->
+            <li class="page-item" aria-current="page"> <!--motramos la primer pagina cuando no estamos ne la primera -->
+                <a class="page-link" href="?page=1">Inicio</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ productos.previous_page_number }}">&laquo;</a>
+            </li>
+            {% endif %}
+
+            {% for page in paginas %} <!--este es para marcar actuivoa aqui va el range de la interacion -->
+            <li class="page-item{% if pagina_actual == page %} active{% endif %}"> <!--si la pagina actual es igual a la pagina le damos active-->
+                <a class="page-link" href="?page={{ page }}">{{ page }}</a>
+            </li>
+            {% endfor %}
+
+            {% if productos.has_next %}<!--esta es para delante -->
+            <li class="page-item">
+                <a class="page-link" href="?page={{ productos.next_page_number }}">&raquo;</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ productos.paginator.num_pages }}">Fin</a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+</div>
+
+<style>
+    #alinear{
+        display:flex;
+        padding:20px;
+        margin-auto;
+        place-content:center;
+        
+    }
+
+</style>

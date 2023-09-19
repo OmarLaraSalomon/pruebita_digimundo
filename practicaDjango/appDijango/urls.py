@@ -7,7 +7,7 @@ from django.conf.urls.static import static
 from django.contrib.auth.views import LoginView, LogoutView
 from django.conf import settings
 from django.conf.urls.static import static
-
+from django.urls import path , re_path ,include
 
 urlpatterns = [
     path('', views.feed, name ="feed"),
@@ -26,6 +26,8 @@ urlpatterns = [
     url('^productos/$' , views.produ, name="productos"),
     url('^servicio/$' , views.servi, name="servicios"),
     url('^home/$' , views.home, name="home"),
+    url('^paginacion/$' , views.paginacion, name="paginacion"),
+    url('^actualizar/$' , views.actualiza, name="actualizar"),
    
     url('procesar_pedido/', views.procesar_pedido, name="procesar_pedido"),
 
@@ -49,7 +51,7 @@ urlpatterns = [
     path('restar/<str:producto_id>/', views.restar_producto, name="restar"),
 
 
-
+   
 
     
 
