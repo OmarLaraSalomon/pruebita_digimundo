@@ -27,7 +27,7 @@ urlpatterns = [
     url('^servicio/$' , views.servi, name="servicios"),
     url('^home/$' , views.home, name="home"),
     url('^paginacion/$' , views.paginacion, name="paginacion"),
-    url('^actualizar/$' , views.actualiza, name="actualizar"),
+    url('^actualizar_perfil/$' , views.actualizar_perfil, name="actualizar_perfil"),
    
     url('procesar_pedido/', views.procesar_pedido, name="procesar_pedido"),
 

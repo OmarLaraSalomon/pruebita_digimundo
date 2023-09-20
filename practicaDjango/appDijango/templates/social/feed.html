@@ -1,18 +1,56 @@
 {% extends 'social/layout.html' %}
 {% load humanize %} 
 {% block content %}
-{% load static %}
 
+<!--
+{% for info in infos %}
 <article>
     <div class="container-article">
-       <img src="{{ user.profile.image.url }}"> 
+        <img src="{{ info.user.profile.image.url }}">
         <div>
-            <h2 class="username">@{{ user.username }}</h2>
+            <h2 class="username"><a href="#">@{{ info.user.username }}</a></h2>
             <i class="clock"></i>
-     
+            <div class="post">{{ info.user.email }}</div>
+            <time data-time="#">{{ info.timestamp|naturaltime }}</time>
         </div>
     </div>
+    <br> -->
+    <!-- Mostrar los comentarios solo para el usuario actual -->
+
+
+<!--{% for comment in info.comentarios %}
+    <div class="comment">
+    <p>{{ comment.opinion }} -->    <!--<time data-time="#">{{ comment.timestamp|naturaltime }}</time> </p>
+        <br>
+    </div>
+    {% endfor %}
 </article>
+{% endfor %} 
+-->
+
+{% for info in infos %}  <!--recorre objeto DatosA en la lista de infos, para cada info un bloque -->
+<article>
+    <div class="container-article">
+        <img src="{{ info.user.profile.image.url }}"> <!-- obtinee la imagen de perfil que cargo el usuario, peor como se va a modificar en otra tabl por eso el info  la url se toma del image del profile-->
+        <div>
+            <h2 class="username"><a href="#">@{{ info.user.username }}</a></h2>
+            <i class="clock"></i>
+            <div class="post">{{ info.user.email }}</div> <!--Muestra el correo electrónico del usuario asociado al objeto DatosA-->
+            <time data-time="#">{{ info.timestamp|naturaltime }}</time> <!--hace 5 minutos-->
+        </div>
+    </div>
+    <!-- Mostrar los comentarios solo para el usuario actual -->
+    {% for comment in info.user.comen.all %}  <!--recorre todos los comentario del usuario al objeto DatosA -->
+    <div class="comment">
+        <p>{{ comment.opinion }} --> <time data-time="#">{{ comment.timestamp|naturaltime }}</time> </p>
+    </div>
+    {% endfor %}
+</article>
+{% endfor %}
+
+
+
+
 
 
 

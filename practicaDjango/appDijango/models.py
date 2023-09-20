@@ -4,7 +4,8 @@ from django.utils import timezone
 from tabnanny import verbose
 from django.db import models
 from django.utils import timezone
-
+from django.db import models
+from django.utils import timezone
 from django.contrib.auth.models import User
 from django.db.models.deletion import CASCADE
 from importlib.resources import contents
@@ -14,8 +15,8 @@ from django.contrib.auth import get_user_model #devuelve el usuario activo actua
 from django.db.models import F,Sum, FloatField  # para calcular el total de una orden de pedido
 
 class Profile(models.Model):
-	user = models.OneToOneField(User, on_delete=models.CASCADE)
-	image = models.ImageField(default='../appDijango/static/imgs/logo.jpg')
+	user = models.OneToOneField(User, on_delete=models.CASCADE) # permite asociar un perfil a cada usuario de manera única
+	image = models.ImageField(upload_to='profile_images/', default='/appDijango/static/imgs/logo.jpg')
 
 	def __str__(self):
 		return f'Perfil de {self.user.username}'
@@ -36,24 +37,33 @@ class Post (models.Model):
     is_leader = models.BooleanField(default=False,null=True)
 
 
-#/class DatosA(models.Model):
-    #user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='datosA')
-    #correo_electronico = models. EmailField(max_length=254)
-    #password1 = models.CharField(max_length=50)
-    #password2 = models.CharField(max_length=50)
-    #telefono = models.CharField(max_length=100)
-    #direccion = models.CharField(max_length=100)
-    #timestamp = models.DateTimeField(default=timezone.now)
-    #content = models.TextField()
+class DatosA(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='datos') # permite asociar un perfil a cada usuario de manera única
+    image = models.ImageField()
+    telefono = models.CharField(max_length=100)
+    direccion = models.CharField(max_length=100)
+    timestamp = models.DateTimeField(auto_now_add=True) #le damos 1 y luego enter
+
     
-    #class Meta: #como queremos que se comporte
-    #    ordering=['-timestamp'] #me s crea en orden ascendente 
-        
-   # def __str__(self): #con este indetificamos 
-  #      return f'{self.user.username} ha actualizado su correo por {self.correo_electronico} con cambio de contraseña a {self.password2} y cambio de celular por{self.telefono} usando como referencia {self.direccion}'
+    class Meta:  #como se va a comportar una clase, la clase post 
+        ordering = ['-timestamp']
+    
+    def __str__(self): #con este indetificamos 
+        return f'{self.user.username}'
 
         
-        
+
+
+class Comentarios(models.Model):
+	user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comen')
+	timestamp = models.DateTimeField(auto_now_add=True) #le damos 1 y luego enter
+	opinion = models.TextField()
+
+	class Meta:
+		ordering = ['-timestamp']
+
+	def __str__(self):
+		return f'{self.user.username}: {self.opinion}'      
     
 
 

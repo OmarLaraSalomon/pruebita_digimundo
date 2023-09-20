@@ -2,19 +2,50 @@
 {% block content %}
 {% load static %}
 
+{% if messages %}
+<div class="alert{% if request.user.is_authenticated %} alert-success{% else %} alert-info{% endif %}">
+    <center>
+    <ul class="custom-message">
+        {% for message in messages %}
+            <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    </center>
+</div>
+{% endif %}
+
+
 <!-- Profile -->
 <div class="profile">
 	<img src="{{ user.profile.image.url }}"> 
-	<h2>@{{ user.username }}</h2>
+	<h2 class="username">@{{ user.username }}</h2>
+	<br>
+	<h2 class="username">{{ user.email }}</h2>
+	<br>
+	
 
+	{% if datos %}
+	<div class="post">Dirección: {{ datos.direccion }}</div>
+	<div class="post">Telefono: {{ datos.telefono }}</div>
+{% endif %}
+
+	<br>
 	
 		<button><a class="follow-button" href="#">Post</a></button>
 		<br>
 		
-		<button><a class="follow-button" href="{% url 'actualizar' %}">Acutalizar infromacion </a></button>
+		<button><a class="follow-button" href="{% url 'actualizar_perfil' %}">Actualizar datos  </a></button>
 	
-			
+		<br>
+		
+		
 	
+</div>
+
+
+<div class="follow">
+
+	<!--SAQUI QUE APAREZCAN LAS MODIFICACIONES QUE HA HECO CADA USAURIO Y SOLO LE APAREZCAN A EL -->
 </div>
 
 <!-- Follow items -->
@@ -35,5 +66,10 @@
 </div>
 
 
+<style>
+	.custom-message li {
+		font-size: 20px; /* Ajusta el tamaño de fuente según tus preferencias */
+	}
+</style>
 {{ block.super }}
 {% endblock %}

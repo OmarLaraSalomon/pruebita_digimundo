@@ -1,0 +1,38 @@
+{% extends 'social/layout.html' %}
+{% block content%}
+{% load static%}
+
+
+<!-- el encrypte es para la carga de archivos en formulario y el multiart permite porcesar archivos -->
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %} <!--genera un token CSRF -->
+
+    <label for="username">Nombre de Usuario:</label>
+    <input type="text" id="username" name="username"  placeholder="{{ user.username }}"><br>
+
+    <label for="email">Correo Electrónico:</label>
+    <input type="email" id="email" name="email" placeholder= "{{ user.email }}"><br>
+
+    <label for="telefono">Teléfono:</label>
+    <input type="text" id="telefono" name="telefono" value="{{ datos.telefono }}"><br>
+
+    <label for="direccion">Dirección:</label>
+    <input type="text" id="direccion" name="direccion" value="{{ datos.direccion }}"><br>
+<center>
+    <label for="image">Imagen de Perfil Actual:</label> <br>
+    <img src= "{{ user.profile.image.url }}" width="200" height="200"><br> <br>
+</center>
+    <label for="new_image">Cambiar Imagen de Perfil:</label> <br>
+    <input type="file" id="new_image" name="image"><br>
+
+<!--
+    <label for="extra">Información Adicional:</label>
+    <textarea id="extra" name="extra">{{ datos.extra }}</textarea><br>-->
+
+    
+    <button type="submit" id="submit">Guardar cambios</button>
+</form>
+
+
+
+{% endblock %}

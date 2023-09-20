@@ -14,6 +14,8 @@ from .carro import Carro
 from .models import Pedido
 from .models import LineaPedido
 from .models import Noticias
+from .models import Comentarios
+from .models import DatosA, Profile  # Importa el modelo de Profile
 #https://www.clubdetecnologia.net/blog/2020/uso-del-pylint-para-analizar-codigo-en-python/ # este es del pylint que marcaba erorr las importacinoes 
 from django.shortcuts import render
 from django.template import RequestContext
@@ -39,6 +41,7 @@ from decimal import Decimal  # Importa Decimal para manejar valores monetarios
 from django.core.paginator import Paginator
 from django.views.defaults import page_not_found
 from django.template import RequestContext
+from django.db.models import Q
 
 # Create your views here.
 
@@ -55,15 +58,41 @@ def layout(request):
   return render(request, 'social/layout.html')
 
 
+"""
+ #solo entrna los qyue estan autenticados
+@login_required
+def feed(request): #para porcesar las soliocitudes
+    user = request.user  #user obtiene el objeto usuario actualemnte autenticado 
+    infos = DatosA.objects.all() #infos obtiene todos los objetos de mi modelo 
 
+    # Obtener los comentarios relacionados con cada usuario en la lista de Infos
+    for info in infos:# itera un objeto y lo vuelve en info 
+        info.comentarios = Comentarios.objects.filter(user=info.user) #para cada objeto info realiza una consulta en el modelo comentarios
+#se filtran todos los comentarios que pertenecen al mismo usuario que el objeto info.usery se almacena con comentraios
+    context = {'infos': infos} #se crea el diccionario 
+    return render(request, 'social/feed.html', context)
+"""
+
+
+@login_required
 def feed(request):
+    user = request.user
+    infos = DatosA.objects.all()
 
-  return render(request, 'social/feed.html')
-
+    context = {'infos': infos}
+    return render(request, 'social/feed.html', context)
+  
+  
 
 def perfil(request):
-
-  return render(request, 'social/perfil.html')
+    user = request.user
+    try:
+        datos = DatosA.objects.get(user=user)
+    except DatosA.DoesNotExist:
+        datos = None
+    
+    context = {'user': user, 'datos': datos}
+    return render(request, 'social/perfil.html', context)
 
 
 def registro(request):
@@ -126,33 +155,58 @@ def consultar(request):
   return render(request, 'social/consulta.html', context )
 
 
+from django.contrib.auth.models import User  # Importa el modelo de usuario de Django
 
+def actualizar_perfil(request):
+    if request.method == 'POST': #es de tipo POST, parar extraer los datos enviados del objeto rquiest en el formulario
 
-def actualiza(request):
-  if request.method == 'POST':  
-        correoPru=request.POST['correo_electronico']
-        asunto= request.POST['nombre']+ ' '+ request.POST['apellidos']+ ', '+ request.POST['cargo']+ ' en '+ request.POST['empresa']+ ' con correo '+ request.POST['correo_electronico']+ ' \n ' +'Envio su informacion para una consulta con respecto al asunto: '+ request.POST['comentarios']+ ' \n '+ 'En breve sera contactado al numero ' + request.POST['telefono']
-        datos = Correo.objects.create(
-            nombre=request.POST['nombre'], 
-            apellidos=request.POST['apellidos'], 
-            correo_electronico=request.POST['correo_electronico'], 
-            telefono=request.POST['telefono'],
-            empresa=request.POST['empresa'],
-            cargo=request.POST['cargo'],
-            comentarios=request.POST['comentarios']
-            )
-        datos.save()
+        user = request.user # Procesar el formulario enviado por el usuario
+        telefono = request.POST['telefono']
+        direccion = request.POST['direccion'] #estos son los nuevos campos que va a tener el usuario
+        email = request.POST['email']  # Nuevo correo electrónico
+        username = request.POST['username']  # Nuevo nombre de usuario
+        image = request.FILES.get('image')  # Obtiene la imagen de perfil cargada por el usuario
         
-        send_mail(
-    'Correo de Contacto recibido, Esperando confirmación ',
-    asunto,
-    correoPru,
-    ['weskermexx@gmail.com'],
-    fail_silently=False
-)
-  context = {}
-  return render(request, 'social/actualizar_info.html')
+  #extrae varios campos del formulario que el usuario envió en la solicitud POST. 
+        # Actualizar los datos en la base de datos
+        
+        #se crea objeto daotsA que es mi modelo asociado al usuario actual
+#datos es mi objeto  # created  es una bandera booleana que indica si se creó un nuevo objeto 
+#DaotsA si no existe created es true, si existe el objteo es false
+        datos, created = DatosA.objects.get_or_create(user=user)  #get_or_create busca el objeto en la base de datos y lo crea si no existe
+        datos.telefono = telefono
+        datos.direccion = direccion
+        datos.save() #guarda los nuesvos tregistos del  modelo 
 
+#la vairbale datos almacena al objeto Datos
+
+        # Actualizar el correo electrónico y el nombre de usuario del usuario
+        user.email = email
+        user.username = username
+
+#Si el usuario ha cargado una nueva imagen de perfil  
+# la vista busca o crea un objeto Profile asociado al usuario y actualiza la imagen de perfil en ese objeto.
+        # Actualizar la imagen de perfil si se cargó una nueva
+        
+        if image: #checa si la imagen no es none significa que el usuario ha subido una nueva 
+          
+          #porfile es la vairable  que alamcena al objeto Profile       
+            profile, created = Profile.objects.get_or_create(user=user) #ntentará obtener el perfil del usuario, y si no existe, lo creará automáticamente.
+            profile.image = image #se obtinee el objeto profile se le asigna la nueva miagen a la propiedad image
+            profile.save() #guarda los cambios en el objeto Profile
+
+        user.save()  #guarda el usuario en la base de datos con los cambios realizados en su perfil.
+        messages.success(request, 'Tu perfil ha sido actualizado correctamente.')
+        return redirect('social/perfil.html')  # Cambia 'perfil' al nombre de tu vista de perfil
+      
+#no se ha enviado el formulario  pero si ha accedido el usuario a la vista 
+#mostrar el formulario cyando accese sin enviar datos y ya luego se prellena
+    else:
+        # Mostrar el formulario de actualización de perfil
+        datos, created = DatosA.objects.get_or_create(user=request.user) #obtener el objeto DatosA on el usuario actual
+        context = {'datos': datos, 'user': request.user}
+        return render(request, 'social/actualizar_perfil.html', context)
+#el context  contiene los datos del usuario y su perfil,
 
 def carrusel(request):
  

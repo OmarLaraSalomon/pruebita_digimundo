@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import CategoriaProd, Productos, Servicios, Pedido, LineaPedido, Noticias, Profile
+from .models import CategoriaProd, Productos, Servicios, Pedido, LineaPedido, Noticias, Profile, DatosA, Comentarios
 # Register your models here.
 
 class CategoriaProdAdmin(admin.ModelAdmin):
@@ -52,6 +52,8 @@ admin.site.register(Pedido,PedidoAdmin)
 
 admin.site.register(Profile)
 
+admin.site.register(DatosA)
 
+admin.site.register(Comentarios)
 
 
