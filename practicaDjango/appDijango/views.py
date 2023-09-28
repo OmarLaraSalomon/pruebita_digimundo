@@ -15,7 +15,7 @@ from .models import Pedido
 from .models import LineaPedido
 from .models import Noticias
 from .models import Comentarios
-from .models import DatosA, Profile  # Importa el modelo de Profile
+from .models import DatosA, Profile, ModificacionDatos, Comentarios  # Importa el modelo de Profile
 #https://www.clubdetecnologia.net/blog/2020/uso-del-pylint-para-analizar-codigo-en-python/ # este es del pylint que marcaba erorr las importacinoes 
 from django.shortcuts import render
 from django.template import RequestContext
@@ -23,7 +23,6 @@ from django import template  # Importa el módulo template de Django
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
 from django.shortcuts import render, loader
-from .forms import UserRegisterForm
 from django.contrib import messages
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
@@ -32,6 +31,7 @@ from django.core.mail import send_mail
 from django.template.loader import get_template
 from django.template.loader import render_to_string
 import smtplib
+from django.shortcuts import render, redirect, get_object_or_404
 from email.message import EmailMessage
 from django.utils.html import strip_tags
 from django.db.models import Sum, F, FloatField
@@ -42,9 +42,10 @@ from django.core.paginator import Paginator
 from django.views.defaults import page_not_found
 from django.template import RequestContext
 from django.db.models import Q
-
+from .forms import UserRegisterForm, ComentarioForm
+from django.utils.timezone import datetime, now
 # Create your views here.
-
+from .context_processor import importe_total_carro
 # el context es para pedir datos a base 
 
 def layout(request):
@@ -83,7 +84,9 @@ def feed(request):
     return render(request, 'social/feed.html', context)
   
   
-
+""" 
+#Este si funciona y los datos pe los pone arriba 
+@login_required
 def perfil(request):
     user = request.user
     try:
@@ -94,7 +97,194 @@ def perfil(request):
     context = {'user': user, 'datos': datos}
     return render(request, 'social/perfil.html', context)
 
+  """
+  
+#si no  quito  DatosA.all() los datos arribas no  aparecen 
+@login_required
+def perfil(request):
+    user = request.user
+    
+    datos_exists = DatosA.objects.filter(user=user).exists()
+   
+   
+    if not datos_exists:
+    # Crea un nuevo objeto DatosA para el usuario
+     DatosA.objects.create(user=user)
+    
+# Ahora puedes obtener el objeto DatosA sin preocuparte por el error
+    datos = DatosA.objects.get(user=user)
 
+    # Recupera todas las modificaciones relacionadas con los datos actuales del usuario
+
+    modificaciones = ModificacionDatos.objects.filter(datos=datos).order_by('-timestamp_modificacion')
+
+# Filtra las modificaciones para incluir solo las que realmente se han cambiado
+    modificaciones_filtradas = []
+    for modificacion in modificaciones:
+        #if modificacion.telefono_anterior != datos.telefono or modificacion.direccion_anterior != datos.direccion:
+          modificaciones_filtradas.append(modificacion)
+          
+    paginator = Paginator(modificaciones_filtradas, 5)
+    pagina = request.GET.get("page") or 1
+    modificaciones_filtradas= paginator.get_page(pagina)
+    pagina_actual = int(pagina)
+    paginas = range(1, modificaciones_filtradas.paginator.num_pages + 1)
+    
+
+    context = {'user': user, 'datos': datos, 'modificaciones': modificaciones_filtradas , 'modificaciones_filtradas': modificaciones_filtradas,  'paginas': paginas, 'pagina_actual': pagina_actual}
+    return render(request, 'social/perfil.html', context)
+
+
+
+@login_required
+def comentarios(request):
+	current_user = get_object_or_404(User, pk=request.user.pk)
+	if request.method == 'POST':
+		form = ComentarioForm(request.POST)
+		if form.is_valid():
+			comen = form.save(commit=False) #poara ver quien la esta enviando
+			comen.user = current_user
+			comen.save()
+			messages.success(request, 'Comentario Publicado')
+			return redirect('feed')
+	else:
+		form = ComentarioForm()
+	return render(request, 'social/comentarios.html', {'form' : form })
+  
+
+""""
+ #solo entrna los qyue estan autenticados
+@login_required
+def feed(request): #para porcesar las soliocitudes
+    user = request.user  #user obtiene el objeto usuario actualemnte autenticado 
+    infos = DatosA.objects.all() #infos obtiene todos los objetos de mi modelo 
+
+    # Obtener los comentarios relacionados con cada usuario en la lista de Infos
+    for info in infos:# itera un objeto y lo vuelve en info 
+        info.comentarios = Comentarios.objects.filter(user=info.user) #para cada objeto info realiza una consulta en el modelo comentarios
+#se filtran todos los comentarios que pertenecen al mismo usuario que el objeto info.usery se almacena con comentraios
+    context = {'infos': infos} #se crea el diccionario 
+    return render(request, 'social/feed.html', context)
+"""
+
+
+from django.utils import timezone
+
+
+@login_required
+def actualizar_perfil(request):
+    user = request.user
+    datos= DatosA.objects.all()
+    
+    if request.method == 'POST':
+        # Obtener los datos enviados por el formulario
+        telefono = request.POST.get('telefono')
+        direccion = request.POST.get('direccion')
+        email = request.POST.get('email')
+        username = request.POST.get('username')
+        image = request.FILES.get('imagen')
+
+        # Obtener los valores anteriores de email y dirección desde los campos ocultos
+        telefono_anterior = request.POST.get('telefono_anterior', '') #las "" es porque son ocualtos y luego hay porblemas si no se ponen
+        direccion_anterior = request.POST.get('direccion_anterior', '')
+        imagen_anterior = request.FILES.get('imagen_anterior', None)
+        nueva_imagen = request.FILES.get('image', None)  
+        username_anterior = user.username
+        email_anterior = user.email
+        datos_actual, created = DatosA.objects.get_or_create(user=user) #get_or_create busca el objeto en la base de datos y lo crea si no existe
+        # Crear un nuevo objeto DatosA para el historial
+        # Crea un nuevo objeto ModificacionDatos para el historial
+        modificacion = ModificacionDatos(
+        datos=datos_actual,
+        telefono_anterior=telefono_anterior,
+        direccion_anterior=direccion_anterior,
+        imagen_anterior=imagen_anterior,
+        username_anterior=username_anterior,
+        email_anterior=email_anterior
+        )
+
+        # Actualiza los datos en DatosA
+        datos_actual.telefono = telefono
+        datos_actual.direccion = direccion
+        datos_actual.save()
+
+        # Actualiza el correo electrónico y el nombre de usuario del usuario
+        user.email = email
+        user.username = username
+
+    
+        # Actualiza la imagen de perfil si se proporciona una nueva
+        if nueva_imagen:
+            # Guardar la imagen actual en imagen_anterior en ModificacionDatos
+            modificacion.imagen_anterior = user.profile.image
+            modificacion.save()
+
+            # Asignar la nueva imagen al perfil del usuario
+            user.profile.image = nueva_imagen
+
+            # Guardar el perfil del usuario con la nueva imagen
+            user.profile.save()
+        # Realizar comparaciones entre valores anteriores y actuales
+        if user.username != username_anterior:
+            messages.info(request, f'Cambio en el usuario: {username_anterior} ---> {username}') 
+        else: 
+            messages.info(request, 'No hubo cambio en el usuario')
+
+        if user.email != email_anterior:
+            messages.info(request, f'Cambio en el correo: {email_anterior} ----> {user.email}')
+        else: 
+            messages.info(request, 'No hubo cambio de correo')
+
+        if user.profile.image != imagen_anterior:
+            messages.info(request, f'Cambio en la imagen: {imagen_anterior} ----> {user.profile.image}')
+        else: 
+            messages.info(request, 'No hubo cambio en la imagen')
+            
+        if telefono != telefono_anterior:
+            messages.info(request, f'Cambio en el telefono: {telefono_anterior} ----> {telefono}')
+        else:
+            messages.info(request, 'No hubo cambio de telefono')
+
+        if direccion != direccion_anterior:
+            messages.info(request, f'Cambio en la dirección: {direccion_anterior} ----> {direccion}')
+        else: 
+            messages.info(request, 'No hubo cambio de direccion')
+
+        messages.success(request, 'Tu perfil ha sido actualizado correctamente.')
+        return redirect('perfil')
+
+    else:
+    # Mostrar el formulario de actualización de perfil
+        datos_actual, created = DatosA.objects.get_or_create(user=user)
+        context = {'datos_actual': datos_actual, 'user': user}
+        return render(request, 'social/actualizar_perfil.html', context)
+
+
+      
+    
+
+def PagHis(request):
+
+  return render(request, 'social/paginacion_historial.html')
+
+@login_required
+def produ(request):
+
+  productos=Productos.objects.all()
+  paginacion= Paginator(productos, 3) #me va a paginar de 3 en 3 los porductos
+  pagina= request.GET.get("page") or 1 #vamos a recuperar la pagina y vamos a obtener la page que va a venir en la url y si no existe nos va a mostrar 1, si no hay variable pagina nos quedamos con 1
+  productos=paginacion.get_page(pagina) #los productos que necesitamos  son los articulos que necesitamos y retornamos para recuperarlos
+  pagina_actual= int(pagina) #cuando venga por la url debe de ser stinrg y luego entero para cambiar la paginacion en la url dira pagina 1 o 2 
+  paginas= range(1, productos.paginator.num_pages+1) #range ofrece varias frimas, permite definir el inico y final, le final se excluye, hace iteraciones el ultimo se excluye, 
+  if not request.user.is_authenticated:
+        messages.warning(request, "Debes estar logueado para acceder a esta página.")
+        return redirect('feed')  # Redirige a la página de inicio de sesión
+
+  return render(request, 'social/productos.html', {"productos": productos, "paginas":paginas, "pagina_actual": pagina_actual})
+
+
+      
+      
 def registro(request):
 	if request.method == 'POST':
 		form = UserRegisterForm(request.POST)
@@ -155,62 +345,9 @@ def consultar(request):
   return render(request, 'social/consulta.html', context )
 
 
-from django.contrib.auth.models import User  # Importa el modelo de usuario de Django
-
-def actualizar_perfil(request):
-    if request.method == 'POST': #es de tipo POST, parar extraer los datos enviados del objeto rquiest en el formulario
-
-        user = request.user # Procesar el formulario enviado por el usuario
-        telefono = request.POST['telefono']
-        direccion = request.POST['direccion'] #estos son los nuevos campos que va a tener el usuario
-        email = request.POST['email']  # Nuevo correo electrónico
-        username = request.POST['username']  # Nuevo nombre de usuario
-        image = request.FILES.get('image')  # Obtiene la imagen de perfil cargada por el usuario
-        
-  #extrae varios campos del formulario que el usuario envió en la solicitud POST. 
-        # Actualizar los datos en la base de datos
-        
-        #se crea objeto daotsA que es mi modelo asociado al usuario actual
-#datos es mi objeto  # created  es una bandera booleana que indica si se creó un nuevo objeto 
-#DaotsA si no existe created es true, si existe el objteo es false
-        datos, created = DatosA.objects.get_or_create(user=user)  #get_or_create busca el objeto en la base de datos y lo crea si no existe
-        datos.telefono = telefono
-        datos.direccion = direccion
-        datos.save() #guarda los nuesvos tregistos del  modelo 
-
-#la vairbale datos almacena al objeto Datos
-
-        # Actualizar el correo electrónico y el nombre de usuario del usuario
-        user.email = email
-        user.username = username
-
-#Si el usuario ha cargado una nueva imagen de perfil  
-# la vista busca o crea un objeto Profile asociado al usuario y actualiza la imagen de perfil en ese objeto.
-        # Actualizar la imagen de perfil si se cargó una nueva
-        
-        if image: #checa si la imagen no es none significa que el usuario ha subido una nueva 
-          
-          #porfile es la vairable  que alamcena al objeto Profile       
-            profile, created = Profile.objects.get_or_create(user=user) #ntentará obtener el perfil del usuario, y si no existe, lo creará automáticamente.
-            profile.image = image #se obtinee el objeto profile se le asigna la nueva miagen a la propiedad image
-            profile.save() #guarda los cambios en el objeto Profile
-
-        user.save()  #guarda el usuario en la base de datos con los cambios realizados en su perfil.
-        messages.success(request, 'Tu perfil ha sido actualizado correctamente.')
-        return redirect('social/perfil.html')  # Cambia 'perfil' al nombre de tu vista de perfil
-      
-#no se ha enviado el formulario  pero si ha accedido el usuario a la vista 
-#mostrar el formulario cyando accese sin enviar datos y ya luego se prellena
-    else:
-        # Mostrar el formulario de actualización de perfil
-        datos, created = DatosA.objects.get_or_create(user=request.user) #obtener el objeto DatosA on el usuario actual
-        context = {'datos': datos, 'user': request.user}
-        return render(request, 'social/actualizar_perfil.html', context)
-#el context  contiene los datos del usuario y su perfil,
 
 def carrusel(request):
- 
- 
+
   return render(request, 'social/carru.html')
 
 @login_required # se requiere loguear para acceder 

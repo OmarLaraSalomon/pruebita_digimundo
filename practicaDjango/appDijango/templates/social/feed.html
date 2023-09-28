@@ -36,13 +36,13 @@
             <h2 class="username"><a href="#">@{{ info.user.username }}</a></h2>
             <i class="clock"></i>
             <div class="post">{{ info.user.email }}</div> <!--Muestra el correo electrónico del usuario asociado al objeto DatosA-->
-            <time data-time="#">{{ info.timestamp|naturaltime }}</time> <!--hace 5 minutos-->
+            <time data-time="#">{{ info.timestamp}}</time> <!--hace 5 minutos-->
         </div>
     </div>
     <!-- Mostrar los comentarios solo para el usuario actual -->
     {% for comment in info.user.comen.all %}  <!--recorre todos los comentario del usuario al objeto DatosA -->
     <div class="comment">
-        <p>{{ comment.opinion }} --> <time data-time="#">{{ comment.timestamp|naturaltime }}</time> </p>
+        <p>{{ comment.opinion }} --> <time data-time="#">{{ comment.timestamp }}</time> </p>
     </div>
     {% endfor %}
 </article>

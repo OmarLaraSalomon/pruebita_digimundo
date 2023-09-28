@@ -15,11 +15,11 @@ from django.contrib.auth import get_user_model #devuelve el usuario activo actua
 from django.db.models import F,Sum, FloatField  # para calcular el total de una orden de pedido
 
 class Profile(models.Model):
-	user = models.OneToOneField(User, on_delete=models.CASCADE) # permite asociar un perfil a cada usuario de manera única
-	image = models.ImageField(upload_to='profile_images/', default='/appDijango/static/imgs/logo.jpg')
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='imagenes_perfil', default='logo.jpg', null=True, blank=True)
 
-	def __str__(self):
-		return f'Perfil de {self.user.username}'
+    def __str__(self):
+        return f'Perfil de {self.user.username}'
 
 # Create your models here.
 class Post (models.Model):
@@ -36,20 +36,28 @@ class Post (models.Model):
     departamento = models.CharField(max_length=250, null=True)
     is_leader = models.BooleanField(default=False,null=True)
 
-
 class DatosA(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='datos') # permite asociar un perfil a cada usuario de manera única
-    image = models.ImageField()
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='datos')
     telefono = models.CharField(max_length=100)
     direccion = models.CharField(max_length=100)
-    timestamp = models.DateTimeField(auto_now_add=True) #le damos 1 y luego enter
+    timestamp_modificacion = models.DateTimeField(auto_now=True)
 
-    
-    class Meta:  #como se va a comportar una clase, la clase post 
-        ordering = ['-timestamp']
-    
-    def __str__(self): #con este indetificamos 
+    def __str__(self):
         return f'{self.user.username}'
+    
+    
+    
+class ModificacionDatos(models.Model):
+    datos = models.ForeignKey(DatosA, on_delete=models.CASCADE)
+    telefono_anterior = models.CharField(max_length=255)
+    direccion_anterior = models.CharField(max_length=255)
+    imagen_anterior = models.ImageField(upload_to='profile_images', blank=True, null=True)  # Campo para la imagen anterior
+    username_anterior = models.CharField(max_length=150, blank=True)
+    email_anterior = models.EmailField(blank=True)
+    timestamp_modificacion = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'Modificación de datos para {self.datos.user.username}'
 
         
 
@@ -97,7 +105,6 @@ class CategoriaProd(models.Model):
 
 
 class Productos (models.Model):
-  
     nombre = models.CharField(max_length=90)
     categoria = models.ForeignKey(CategoriaProd,on_delete=models.CASCADE)
     imagen = models.ImageField(upload_to="productos", null=True, blank=True)

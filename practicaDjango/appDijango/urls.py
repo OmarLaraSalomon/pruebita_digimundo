@@ -27,13 +27,13 @@ urlpatterns = [
     url('^servicio/$' , views.servi, name="servicios"),
     url('^home/$' , views.home, name="home"),
     url('^paginacion/$' , views.paginacion, name="paginacion"),
+    url('^paginacion_historial/$' , views.PagHis, name="paginacion_historial"),
     url('^actualizar_perfil/$' , views.actualizar_perfil, name="actualizar_perfil"),
-   
-    url('procesar_pedido/', views.procesar_pedido, name="procesar_pedido"),
+    url('^comentarios/$', views.comentarios, name="comentarios"),
 
     path('', views.enviar_mail, name="enviar_email"),
 
-   
+    url('procesar_pedido/', views.procesar_pedido, name="procesar_pedido"),
 # agregar  producto
 
   #este checa si exsite

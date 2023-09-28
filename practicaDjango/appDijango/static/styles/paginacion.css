@@ -1,0 +1,50 @@
+/* Estilos generales de la paginación */
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.pagination li {
+    display: inline-block;
+    margin: 0 5px;
+}
+
+/* Estilos para los enlaces de paginación */
+.pagination li a {
+    padding: 8px 16px;
+    text-decoration: none;
+    border: 1px solid;
+    display: block;
+    padding: 10px 20px;
+    color: #fff;
+    background: #024959;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+/* Estilos para el enlace activo */
+.pagination li.active a {
+    color: white;
+    background: #037e8c;
+    font-weight: bold;
+}
+
+/* Estilos para el enlace desactivado */
+.pagination li.disabled a {
+    color: #ddd;
+    pointer-events: none;
+}
+
+/* Añade estilos para pantallas más pequeñas */
+@media screen and (max-width: 786px) {
+    .pagination {
+        width: 95%;
+    }
+
+    .pagination li {
+        margin: 5px 0;
+    }
+}
+
+

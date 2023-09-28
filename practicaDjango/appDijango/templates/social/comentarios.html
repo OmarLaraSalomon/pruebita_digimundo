@@ -1,0 +1,14 @@
+{% extends 'social/layout.html' %}
+
+{% block content %}
+
+<form method="post">
+	{% csrf_token %}
+	{{ form.as_p }} <!--Mnadamos a llamar el formulario como parrafo-->
+    <center>
+
+	<button type="submit" class="post" id="" >Postear!</button>
+	</center>
+</form>
+
+{% endblock %}

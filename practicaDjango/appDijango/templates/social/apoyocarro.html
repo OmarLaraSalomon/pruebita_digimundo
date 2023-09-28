@@ -23,8 +23,9 @@
     </thead>
     
     <tbody>
-    
-        {% if request.session.carro.items %}
+    <!--verifica si la sescion del usuaior contiene un diccionario llamado carro
+    verifica si el carrito de compras del usuario no está vacío.-->
+        {% if request.session.carro.items %} 
         {% for key, value in request.session.carro.items %}
     
     

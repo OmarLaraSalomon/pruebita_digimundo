@@ -1,0 +1,36 @@
+{% load static %}
+
+<link href="{% static 'styles/paginacion.css' %}" rel="stylesheet">
+
+
+
+<div class="row mt-3 justify-content-center " >
+    <nav>
+       <ul class="pagination pagination-lg horizontal-pagination">
+    {% if modificaciones_filtradas.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?page=1">Inicio</a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="?page={{ modificaciones_filtradas.previous_page_number }}">&laquo;</a>
+        </li>
+    {% endif %}
+
+    {% for page in paginas %}
+        <li class="page-item{% if pagina_actual == page %} active{% endif %}">
+            <a class="page-link" href="?page={{ page }}">{{ page }}</a>
+        </li>
+    {% endfor %}
+
+    {% if modificaciones_filtradas.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ modificaciones_filtradas.next_page_number }}">&raquo;</a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="?page={{ modificaciones_filtradas.paginator.num_pages }}">Fin</a>
+        </li>
+    {% endif %}
+</ul>
+    </nav>
+</div>
+
