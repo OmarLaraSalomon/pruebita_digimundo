@@ -174,72 +174,103 @@ from django.utils import timezone
 @login_required
 def actualizar_perfil(request):
     user = request.user
-    datos= DatosA.objects.all()
+    datos_actual, created = DatosA.objects.get_or_create(user=user)
     
     if request.method == 'POST':
-        # Obtener los datos enviados por el formulario
         telefono = request.POST.get('telefono')
         direccion = request.POST.get('direccion')
         email = request.POST.get('email')
         username = request.POST.get('username')
-        image = request.FILES.get('imagen')
+        
+        nueva_imagen = request.FILES.get('image', None)
 
-        # Obtener los valores anteriores de email y dirección desde los campos ocultos
-        telefono_anterior = request.POST.get('telefono_anterior', '') #las "" es porque son ocualtos y luego hay porblemas si no se ponen
+        telefono_anterior = request.POST.get('telefono_anterior', '')
         direccion_anterior = request.POST.get('direccion_anterior', '')
-        imagen_anterior = request.FILES.get('imagen_anterior', None)
-        nueva_imagen = request.FILES.get('image', None)  
-        username_anterior = user.username
-        email_anterior = user.email
-        datos_actual, created = DatosA.objects.get_or_create(user=user) #get_or_create busca el objeto en la base de datos y lo crea si no existe
-        # Crear un nuevo objeto DatosA para el historial
-        # Crea un nuevo objeto ModificacionDatos para el historial
+        
+        email_anterior = request.POST.get('email_anterior', '')
+        username_anterior = request.POST.get('username_anterior', '')
+        
+        
+        
+        
+        email_anterior = user.email  # Obtener el valor actualizado del correo electrónico
+        username_anterior = user.username  # Obtener el valor actualizado del nombre de usuario
+        imagen_anterior = user.profile.image if nueva_imagen else None
+
+        # Crear un nuevo objeto ModificacionDatos para el historial
         modificacion = ModificacionDatos(
-        datos=datos_actual,
-        telefono_anterior=telefono_anterior,
-        direccion_anterior=direccion_anterior,
-        imagen_anterior=imagen_anterior,
-        username_anterior=username_anterior,
-        email_anterior=email_anterior
+            datos=datos_actual,
+            timestamp_modificacion=datetime.now(),
+            telefono_anterior=telefono_anterior,
+            direccion_anterior=direccion_anterior,
+            imagen_anterior=imagen_anterior,
+            username_anterior=username_anterior,
+            email_anterior=email_anterior
         )
 
-        # Actualiza los datos en DatosA
-        datos_actual.telefono = telefono
-        datos_actual.direccion = direccion
-        datos_actual.save()
+        cambios_realizados = False  # Variable para rastrear si se han realizado cambios
 
-        # Actualiza el correo electrónico y el nombre de usuario del usuario
-        user.email = email
-        user.username = username
+        # Verificar si hay cambios y actualizar el objeto ModificacionDatos en consecuencia
+        if telefono_anterior != telefono:
+            modificacion.telefono_nuevo = telefono
+            cambios_realizados = True
 
-    
-        # Actualiza la imagen de perfil si se proporciona una nueva
-        if nueva_imagen:
-            # Guardar la imagen actual en imagen_anterior en ModificacionDatos
-            modificacion.imagen_anterior = user.profile.image
+        if direccion_anterior != direccion:
+            modificacion.direccion_nueva = direccion
+            cambios_realizados = True
+
+        if username_anterior != username:
+            modificacion.username_nuevo = username
+            cambios_realizados = True
+
+        if email_anterior != email:
+            modificacion.email_nuevo = email
+            cambios_realizados = True
+
+        if nueva_imagen != imagen_anterior:
+            modificacion.imagen_anterior = imagen_anterior
+            modificacion.imagen_nueva = nueva_imagen
+            cambios_realizados = True
+
+        # Guardar la modificación solo si se han realizado cambios
+        if cambios_realizados:
             modificacion.save()
 
-            # Asignar la nueva imagen al perfil del usuario
+        # Actualizar los datos en DatosA solo si se han realizado cambios
+        if cambios_realizados:
+            datos_actual.telefono = telefono
+            datos_actual.direccion = direccion
+            datos_actual.save()
+
+
+    
+        # Actualizar el correo electrónico y el nombre de usuario del usuario
+        user.email = email
+        user.username = username
+        user.save()
+        
+        
+        # Actualizar la imagen de perfil si se proporciona una nueva
+        if nueva_imagen:
             user.profile.image = nueva_imagen
-
-            # Guardar el perfil del usuario con la nueva imagen
             user.profile.save()
-        # Realizar comparaciones entre valores anteriores y actuales
-        if user.username != username_anterior:
-            messages.info(request, f'Cambio en el usuario: {username_anterior} ---> {username}') 
-        else: 
-            messages.info(request, 'No hubo cambio en el usuario')
 
-        if user.email != email_anterior:
+        if username_anterior != user.username:
+            messages.info(request, f'Cambio en el usuario: {username_anterior} ----> {user.username}')
+        else: 
+            messages.info(request, 'No hubo cambio de usuario')
+
+        if email_anterior != user.email:
             messages.info(request, f'Cambio en el correo: {email_anterior} ----> {user.email}')
         else: 
             messages.info(request, 'No hubo cambio de correo')
+            
 
-        if user.profile.image != imagen_anterior:
-            messages.info(request, f'Cambio en la imagen: {imagen_anterior} ----> {user.profile.image}')
+        if nueva_imagen != imagen_anterior:
+            messages.info(request, f'Cambio en la imagen: {imagen_anterior} ----> {nueva_imagen}')
         else: 
             messages.info(request, 'No hubo cambio en la imagen')
-            
+             
         if telefono != telefono_anterior:
             messages.info(request, f'Cambio en el telefono: {telefono_anterior} ----> {telefono}')
         else:
@@ -254,11 +285,9 @@ def actualizar_perfil(request):
         return redirect('perfil')
 
     else:
-    # Mostrar el formulario de actualización de perfil
-        datos_actual, created = DatosA.objects.get_or_create(user=user)
+        # Mostrar el formulario de actualización de perfil
         context = {'datos_actual': datos_actual, 'user': user}
         return render(request, 'social/actualizar_perfil.html', context)
-
 
       
     

@@ -37,6 +37,7 @@
 
 	<br>
 	
+	
 		<button><a class="follow-button" href="{% url 'comentarios' %}">Post</a></button>
 		<br>
 		
@@ -54,49 +55,44 @@
 		<div class="post">*Solo apareceran los datos que sufrierón alguna alteración*</div>
 </div>
 
-
-
 <div class="follow"></div>
 <!-- Mostrar el historial de modificaciones -->
 <div class="profile">
     {% for modificacion in modificaciones %}
     <article>
         <div class="container-article">
-			{% if modificacion.imagen_anterior %}
-			<img src="{{ modificacion.imagen_anterior.url }}">
-		{% endif %}
+            {% if modificacion.imagen_anterior %}
+                <img src="{{ modificacion.imagen_anterior.url }}">
+            {% endif %}
             <div>
                 <h2 class="username"="#">{{ modificacion.timestamp_modificacion}}</h2> <br>
 
 
-				{% if modificacion.username_anterior != modificacion.datos.user.username %}
-				<div class="post"> Usuario anterior: {{ modificacion.username_anterior }}---> Usuario Actualizado: {{ modificacion.datos.user.username }}</div>
+				{% if modificacion.username_anterior != modificacion.datos.user.username%}
+				<div class="post"> Usuario anterior: {{ modificacion.username_anterior }}---> Usuario Actualizado: {{ modificacion.datos.user.username}}</div>
 			{% endif %}
-			
+
 			<i class="clock"></i>
+
 
 			{% if modificacion.email_anterior != modificacion.datos.user.email %}
-				<div class="post"> Email anterior: {{ modificacion.email_anterior }}---> Usuario Actualizado: {{ modificacion.datos.user.email }}</div>
+				<div class="post"> Email anterior: {{ modificacion.email_anterior }}---> Email Actualizado: {{ modificacion.datos.user.email }}</div>
 			{% endif %}
-			<i class="clock"></i>
 
-			{% if modificacion.direccion_anterior != modificacion.datos.direccion %}
-			<div class="post">Direccion anterior: {{ modificacion.direccion_anterior }}---> Direccion Actualizada: {{ modificacion.datos.direccion }}</div>
-		{% endif %}
-		
-		{% if modificacion.telefono_anterior != modificacion.datos.telefono %}
-			<div class="post">Telefono anterior: {{ modificacion.telefono_anterior }}---> Telefono Actualizado: {{ modificacion.datos.telefono }}</div>
-		{% endif %}
+                <i class="clock"></i>
 
+                {% if modificacion.direccion_anterior != modificacion.datos.direccion %}
+                    <div class="post">Direccion anterior: {{ modificacion.direccion_anterior }}---> Direccion Actualizada: {{ modificacion.datos.direccion }}</div>
+                {% endif %}
+
+                {% if modificacion.telefono_anterior != modificacion.datos.telefono %}
+                    <div class="post">Telefono anterior: {{ modificacion.telefono_anterior }}---> Telefono Actualizado: {{ modificacion.datos.telefono }}</div>
+                {% endif %}
             </div>
-
         </div>
-
     </article>
-	
     {% endfor %}
-	<br><br><br>
-
+    <br><br><br>
 </div>
 	<!--<div>
 		<h5>Post</h5>

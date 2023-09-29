@@ -1,0 +1,146 @@
+	{%for dato in datos%}    <article>
+		<article>
+			<div class="container-article">
+				<img src="{{ dato.user.profile.image.url }}"> <!-- obtinee la imagen de perfil que cargo el usuario, peor como se va a modificar en otra tabl por eso el info  la url se toma del image del profile-->
+				<div>
+					<h2 class="username"><a href="#">@{{ dato.user.username }}</a></h2>
+					<i class="clock"></i>
+					<div class="post">{{ dato.user.email }}</div> <!--Muestra el correo electrónico del usuario asociado al objeto DatosA-->
+					<div class="post">{{ dato.direccion }}</div>
+					<div class="post">{{ dato.telefono }}</div>
+					<time data-time="#">{{ dato.timestamp|naturaltime }}</time> <!--hace 5 minutos-->
+				</div>
+			</div>
+		
+			
+		</article>
+		{% endfor %}
+		
+
+
+
+
+
+
+
+
+
+from django.contrib.auth.models import User  # Importa el modelo de usuario de Django
+def actualizar_perfil(request):
+    if request.method == 'POST': #es de tipo POST, parar extraer los datos enviados del objeto rquiest en el formulario
+
+        user = request.user # Procesar el formulario enviado por el usuario
+        telefono = request.POST['telefono']
+        direccion = request.POST['direccion'] #estos son los nuevos campos que va a tener el usuario
+        email = request.POST['email']  # Nuevo correo electrónico
+        username = request.POST['username']  # Nuevo nombre de usuario
+        image = request.FILES.get('image')  # Obtiene la imagen de perfil cargada por el usuario
+        
+  #extrae varios campos del formulario que el usuario envió en la solicitud POST. 
+        # Actualizar los datos en la base de datos
+        
+        #se crea objeto daotsA que es mi modelo asociado al usuario actual
+#datos es mi objeto  # created  es una bandera booleana que indica si se creó un nuevo objeto 
+#DaotsA si no existe created es true, si existe el objteo es false
+        datos, created = DatosA.objects.get_or_create(user=user)  #get_or_create busca el objeto en la base de datos y lo crea si no existe
+        datos.telefono = telefono
+        datos.direccion = direccion
+        datos.save() #guarda los nuesvos tregistos del  modelo 
+
+#la vairbale datos almacena al objeto Datos
+
+        # Actualizar el correo electrónico y el nombre de usuario del usuario
+        user.email = email
+        user.username = username
+
+#Si el usuario ha cargado una nueva imagen de perfil  
+# la vista busca o crea un objeto Profile asociado al usuario y actualiza la imagen de perfil en ese objeto.
+        # Actualizar la imagen de perfil si se cargó una nueva
+        
+        if image: #checa si la imagen no es none significa que el usuario ha subido una nueva 
+          
+          #porfile es la vairable  que alamcena al objeto Profile       
+            profile, created = Profile.objects.get_or_create(user=user) #ntentará obtener el perfil del usuario, y si no existe, lo creará automáticamente.
+            profile.image = image #se obtinee el objeto profile se le asigna la nueva miagen a la propiedad image
+            profile.save() #guarda los cambios en el objeto Profile
+
+        user.save()  #guarda el usuario en la base de datos con los cambios realizados en su perfil.
+        messages.success(request, 'Tu perfil ha sido actualizado correctamente.')
+        return redirect('social/perfil.html')  # Cambia 'perfil' al nombre de tu vista de perfil
+      
+#no se ha enviado el formulario  pero si ha accedido el usuario a la vista 
+#mostrar el formulario cyando accese sin enviar datos y ya luego se prellena
+    else:
+        # Mostrar el formulario de actualización de perfil
+        datos, created = DatosA.objects.get_or_create(user=request.user) #obtener el objeto DatosA on el usuario actual
+        context = {'datos': datos, 'user': request.user}
+        return render(request, 'social/actualizar_perfil.html', context)
+#el context  contiene los datos del usuario y su perfil,
+
+
+
+
+
+
+
+
+
+
+
+
+
+@login_required
+def actualizar_perfil(request):
+    user = request.user
+
+    if request.method == 'POST':
+        # Obtener los datos enviados por el formulario
+        telefono = request.POST.get('telefono')
+        direccion = request.POST.get('direccion')
+        email = request.POST['email']
+        username = request.POST['username']
+        image = request.FILES.get('imagen')
+
+        # Obtener los valores anteriores de email y dirección desde los campos ocultos
+        telefono_anterior = request.POST.get('telefono_anterior', '')
+        direccion_anterior = request.POST.get('direccion_anterior', '')
+        datos, created = DatosA.objects.get_or_create(user=user)  #get_or_create busca el objeto en la base de datos y lo crea si no existe
+        # Crear un nuevo objeto DatosA para el historial
+        datos = DatosA(
+            user=user,
+            telefono_anterior=telefono,
+            direccion_anterior=direccion,
+            telefono=telefono,
+            direccion=direccion,
+            timestamp_modificacion=timezone.now()
+        )
+
+        # Guardar los datos anteriores en el historial
+        datos.save()
+
+        # Actualizar el perfil actual
+        user.email = email
+        user.username = username
+
+        # Actualizar la imagen de perfil si se cargó una nueva
+        if image:
+            user.profile.image = image
+            user.profile.save()
+
+        user.save()
+
+        # Realizar comparaciones entre valores anteriores y actuales
+        if telefono != telefono_anterior:
+            messages.info(request, f'Cambio en el teleofno : {telefono_anterior} -> {telefono}')
+
+        if direccion != direccion_anterior:
+            messages.info(request, f'Cambio en la dirección: {direccion_anterior} -> {direccion}')
+
+        messages.success(request, 'Tu perfil ha sido actualizado correctamente.')
+        return redirect('perfil')
+
+    else:
+        # Mostrar el formulario de actualización de perfil
+        datos, created = DatosA.objects.get_or_create(user=user)
+        context = {'datos': datos, 'user': user}
+        return render(request, 'social/actualizar_perfil.html', context)

@@ -1,0 +1,235 @@
+@login_required
+def actualizar_perfil(request):
+    user = request.user
+    datos= DatosA.objects.all()
+    
+    if request.method == 'POST':
+        # Obtener los datos enviados por el formulario
+        telefono = request.POST.get('telefono')
+        direccion = request.POST.get('direccion')
+        email = request.POST.get('email')
+        username = request.POST.get('username')
+        image = request.FILES.get('imagen')
+
+        # Obtener los valores anteriores de email y dirección desde los campos ocultos
+        telefono_anterior = request.POST.get('telefono_anterior', '') #las "" es porque son ocualtos y luego hay porblemas si no se ponen
+        direccion_anterior = request.POST.get('direccion_anterior', '')
+        imagen_anterior = request.FILES.get('imagen_anterior', '')
+        username_anterior = user.username
+        email_anterior = user.email
+        datos_actual, created = DatosA.objects.get_or_create(user=user) #get_or_create busca el objeto en la base de datos y lo crea si no existe
+        # Crear un nuevo objeto DatosA para el historial
+        # Crea un nuevo objeto ModificacionDatos para el historial
+        modificacion = ModificacionDatos(
+        datos=datos_actual,
+        telefono_anterior=telefono_anterior,
+        direccion_anterior=direccion_anterior,
+        imagen_anterior=imagen_anterior,
+        username_anterior=username_anterior,
+        email_anterior=email_anterior
+        )
+
+        # Actualiza los datos en DatosA
+        datos_actual.telefono = telefono
+        datos_actual.direccion = direccion
+        datos_actual.save()
+
+        # Actualiza el correo electrónico y el nombre de usuario del usuario
+        user.email = email
+        user.username = username
+
+    
+        # Actualiza la imagen de perfil si se proporciona una nueva
+                
+        if image:
+            # Guardar la imagen actual en imagen_anterior
+            modificacion.imagen_anterior = user.profile.image
+            user.profile.image = image
+            user.profile.save()
+            modificacion.save()
+
+        user.save()
+        modificacion.save()
+     
+        # Realizar comparaciones entre valores anteriores y actuales
+        if user.username != username_anterior:
+            messages.info(request, f'Cambio en el usuario: {username_anterior} ---> {username}') 
+        else: 
+            messages.info(request, 'No hubo cambio en el usuario')
+
+        if user.email != email_anterior:
+            messages.info(request, f'Cambio en el correo: {email_anterior} ----> {user.email}')
+        else: 
+            messages.info(request, 'No hubo cambio de correo')
+
+        if user.profile.image != imagen_anterior:
+            messages.info(request, f'Cambio en la imagen: {imagen_anterior} ----> {user.profile.image}')
+        else: 
+            messages.info(request, 'No hubo cambio en la imagen')
+            
+        if telefono != telefono_anterior:
+            messages.info(request, f'Cambio en el telefono: {telefono_anterior} ----> {telefono}')
+        else:
+            messages.info(request, 'No hubo cambio de telefono')
+
+        if direccion != direccion_anterior:
+            messages.info(request, f'Cambio en la dirección: {direccion_anterior} ----> {direccion}')
+        else: 
+            messages.info(request, 'No hubo cambio de direccion')
+
+        messages.success(request, 'Tu perfil ha sido actualizado correctamente.')
+        return redirect('perfil')
+
+    else:
+    # Mostrar el formulario de actualización de perfil
+        datos_actual, created = DatosA.objects.get_or_create(user=user)
+        context = {'datos_actual': datos_actual, 'user': user}
+        return render(request, 'social/actualizar_perfil.html', context)
+
+
+
+
+
+
+{% if messages %}
+<div class="alert{% if request.user.is_authenticated %} alert-success{% else %} alert-info{% endif %}">
+    <center>
+    <ul class="custom-message">
+        {% for message in messages %}
+            <li>{{ message }}</li> <br>
+        {% endfor %}
+    </ul>
+    </center>
+</div>
+{% endif %}
+
+
+<!-- Profile -->
+<div class="profile">
+
+	<img src="{{ user.profile.image.url }}"> 
+	<h2 class="username">@{{ user.username }}</h2>
+	<br>
+	<h2 class="username">{{ user.email }}</h2>
+	<br>
+	
+	{% if datos %}
+    <div class="post">Dirección Actual: {{ datos.direccion }}</div>
+    <div class="post">Telefono Actual: {{ datos.telefono }}</div>
+	{% else %}
+	<div class="post">No hay datos disponibles.</div>
+{% endif %}
+
+	<br>
+	
+		<button><a class="follow-button" href="{% url 'comentarios' %}">Post</a></button>
+		<br>
+		
+		<button><a class="follow-button" href="{% url 'actualizar_perfil' %}">Actualizar datos  </a></button>
+		<br><br><br>
+		<br><br>
+		<style>
+			h1 {
+				text-shadow: 7px 4px 5px blue;
+			}
+		</style>
+		
+		<h1>HISTORIAL DE MODIFICACIONES </h1>
+	
+		<div class="post">*Solo apareceran los datos que sufrierón alguna alteración*</div>
+</div>
+
+
+<div class="follow"></div>
+
+<!-- Mostrar el historial de modificaciones -->
+<div class="profile">
+    {% for modificacion in modificaciones %}
+    <article>
+        <div class="container-article">
+            {% if modificacion.imagen_anterior %}
+            <img src="{{ modificacion.imagen_anterior.url }}">  <!-- Mostrar la imagen anterior si existe -->
+            {% endif %}
+            <div>
+                <h2 class="username"="#">{{ modificacion.timestamp_modificacion}}</h2> <br>
+
+
+				{% if modificacion.username_anterior != modificacion.datos.user.username %}
+				<div class="post"> Usuario anterior: {{ modificacion.username_anterior }}---> Usuario Actualizado: {{ modificacion.datos.user.username }}</div>
+			{% endif %}
+			
+			<i class="clock"></i>
+
+			{% if modificacion.email_anterior != modificacion.datos.user.email %}
+				<div class="post"> Email anterior: {{ modificacion.email_anterior }}---> Usuario Actualizado: {{ modificacion.datos.user.email }}</div>
+			{% endif %}
+			<i class="clock"></i>
+
+			{% if modificacion.direccion_anterior != modificacion.datos.direccion %}
+			<div class="post">Direccion anterior: {{ modificacion.direccion_anterior }}---> Direccion Actualizada: {{ modificacion.datos.direccion }}</div>
+		{% endif %}
+		
+		{% if modificacion.telefono_anterior != modificacion.datos.telefono %}
+			<div class="post">Telefono anterior: {{ modificacion.telefono_anterior }}---> Telefono Actualizado: {{ modificacion.datos.telefono }}</div>
+		{% endif %}
+
+            </div>
+
+        </div>
+
+    </article>
+	
+    {% endfor %}
+	<br><br><br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@login_required
+def perfil(request):
+    user = request.user
+    datos = DatosA.objects.get(user=user)  # Obtiene los datos actuales del usuario
+
+    # Recupera todas las modificaciones relacionadas con los datos actuales del usuario
+
+    modificaciones = ModificacionDatos.objects.filter(datos=datos).order_by('-timestamp_modificacion')
+
+# Filtra las modificaciones para incluir solo las que realmente se han cambiado
+    modificaciones_filtradas = []
+    for modificacion in modificaciones:
+        #if modificacion.telefono_anterior != datos.telefono or modificacion.direccion_anterior != datos.direccion:
+          modificaciones_filtradas.append(modificacion)
+          
+    paginator = Paginator(modificaciones_filtradas, 5)
+    pagina = request.GET.get("page") or 1
+    modificaciones_filtradas= paginator.get_page(pagina)
+    pagina_actual = int(pagina)
+    paginas = range(1, modificaciones_filtradas.paginator.num_pages + 1)
+    
+
+    context = {'user': user, 'datos': datos, 'modificaciones': modificaciones_filtradas , 'modificaciones_filtradas': modificaciones_filtradas,  'paginas': paginas, 'pagina_actual': pagina_actual}
+    return render(request, 'social/perfil.html', context)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
