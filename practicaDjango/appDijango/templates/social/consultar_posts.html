@@ -1,0 +1,113 @@
+{% extends 'social/consultar_historial.html' %}
+
+{% block content %}
+
+{% load static%}
+
+<html>
+<title> Consultar_posts</title>
+  
+<main>
+
+    <div class="info">
+        <h1 class="titt"> Consultas de Post </h1>
+        <nav class="second-nav"></nav>
+    </div>
+    <br>
+
+ 
+    <div class="dropdown">
+      <button onclick="limpiarTabla()" class="btn btn-secondary" type="button" >Limpiar Tabla</button>
+      <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Seleccionar Usuario:
+      </button>
+
+
+     
+      <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+          <a class="dropdown-item" href="{% url 'consultar_posts' %}">Todos los usuarios</a>
+          <div class="dropdown-divider"></div>
+          {% for user in users %}
+              <a class="dropdown-item" href="{% url 'consultar_posts' %}?selected_user={{ user.id }}" {% if selected_user and selected_user.id == user.id %}class="active"{% endif %}>
+                  {{ user.username }}
+              </a>
+          {% endfor %}
+      </div>
+  </div>
+  
+  <br>
+  <br>
+
+  <div class="container">
+      <table>
+          <thead>
+              <tr> <!--Estes es para que se me generen las columnas en automatico -->
+                  {% for campo in campos %}
+                      <th>{{ campo.verbose_name }}</th>
+                  {% endfor %}
+              </tr>
+          </thead>
+          <tbody>
+              {% if comentarios %}<!--primero se valida si el usuario tiene le historial -->
+                  {% for comentarios in comentarios %} <!--los datos los voy a mostrar en las columnas  -->
+                      <tr> 
+                          <!-- voy a agregar validaciones  -->
+
+                          <td>{{ comentarios.id}}</td>
+                          <td>{{ comentarios.user.username }}</td>
+
+
+
+                          <td>
+                              {% if comentarios.opinion %}
+                              {{ comentarios.opinion }}
+                              {% else %}
+                                  No hubo comentario
+                              {% endif %}
+                          </td>
+
+
+
+
+                  
+                          <td>{{ comentarios.timestamp }}</td>
+                          
+                      </tr>
+                  {% endfor %}
+              {% else %}
+                  <tr>
+                      <td colspan="{{ campos|length }}">NO HAY REGISTROS</td>
+                  </tr>
+              {% endif %}
+          </tbody>
+      </table>
+  </div>
+  
+  
+
+  
+  
+</main>
+
+
+<script>
+  function limpiarTabla() {
+    // Obtén la tabla y su cuerpo
+    var tabla = document.querySelector('table');
+    var tbody = tabla.querySelector('tbody');
+
+    // Elimina todas las filas del cuerpo de la tabla
+    while (tbody.firstChild) {
+      tbody.removeChild(tbody.firstChild);
+    }
+  }
+</script>
+
+
+</body>
+
+
+
+
+</html>
+{% endblock %}

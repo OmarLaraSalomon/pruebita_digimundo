@@ -1,0 +1,213 @@
+
+{% load static%}
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css">
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" ></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" ></script>
+
+
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" href="{% static 'styles/consultas.css' %}">
+</head>
+
+
+<body>
+  <main>
+
+
+
+    <div id="outer">
+      
+      <div class="button_slide slide_left" >
+
+<a class="link" href="{% url 'feed' %}">Regresar a menú Consultas</a>
+
+
+      </div>
+      
+    </div>
+
+
+   
+    {% block content %}
+
+		
+      
+
+ 
+    
+
+    <br><br><br><br>
+
+      <div class="info">
+          <h1 class="titt"> Consultas de Historiales </h1>
+          <nav class="second-nav"></nav>
+      </div>
+      <br>
+
+   
+      <div class="dropdown">
+        <button onclick="limpiarTabla()" class="btn btn-secondary" type="button" >Limpiar Tabla</button>
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Seleccionar Usuario:
+        </button>
+
+
+       
+        <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+            <a class="dropdown-item" href="{% url 'consultar_historial' %}">Todos los usuarios</a>
+            <div class="dropdown-divider"></div>
+            {% for user in users %}
+                <a class="dropdown-item" href="{% url 'consultar_historial' %}?selected_user={{ user.id }}" {% if selected_user and selected_user.id == user.id %}class="active"{% endif %}>
+                    {{ user.username }}
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <br>
+    <br>
+
+    <div class="container">
+        <table>
+            <thead>
+                <tr> <!--Estes es para que se me generen las columnas en automatico -->
+                    {% for campo in campos %}
+                        <th>{{ campo.verbose_name }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% if historial %}<!--primero se valida si el usuario tiene le historial -->
+                    {% for modificacion in historial %} <!--los datos los voy a mostrar en las columnas  -->
+                        <tr> 
+                            <!-- voy a agregar validaciones  -->
+
+                            <td>{{ modificacion.id}}</td>
+                            <td>{{ modificacion.datos.user.username }}</td>
+
+
+
+                            <td>
+                                {% if modificacion.telefono_anterior %}
+                                {{ modificacion.telefono_anterior }}
+                                {% else %}
+                                    No huno cambio de telefono
+                                {% endif %}
+                            </td>
+
+
+
+
+                            <td>
+                                {% if modificacion.direccion_anterior %}
+                                {{ modificacion.direccion_anterior }}
+                                {% else %}
+                                    No hubo cambio en la direccion
+                                {% endif %}
+                            </td>
+
+
+
+                           
+                         
+
+                            <td>
+                                {% if modificacion.imagen_anterior %}
+                                    <img src="{{ modificacion.imagen_anterior.url }}" width="100" height="100"alt="Imagen Anterior">
+                                {% else %}
+                                    No huno cambio de imagen
+                                {% endif %}
+                            </td>
+
+
+
+
+                            <td>
+                                {% if modificacion.username_anterior %}
+                                {{ modificacion.username_anterior }}
+                                {% else %}
+                                    No hubo cambio en el usuario
+                                {% endif %}
+                            </td>
+
+
+
+                            <td>
+                                {% if modificacion.email_anterior %}
+                                {{ modificacion.email_anterior }}
+                                {% else %}
+                                    No hubo cambio en el correo
+                                {% endif %}
+                            </td>
+
+                    
+                            <td>{{ modificacion.timestamp_modificacion }}</td>
+                            
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="{{ campos|length }}">NO HAY REGISTROS</td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+    
+    
+ 
+    
+    
+  </main>
+
+  
+  <script>
+    function limpiarTabla() {
+      // Obtén la tabla y su cuerpo
+      var tabla = document.querySelector('table');
+      var tbody = tabla.querySelector('tbody');
+  
+      // Elimina todas las filas del cuerpo de la tabla
+      while (tbody.firstChild) {
+        tbody.removeChild(tbody.firstChild);
+      }
+    }
+  </script>
+
+<!--  <select id="seleccion" >
+    <option value="xd">Valor1</option>
+    <option value="uwu">Valor2</option>
+    </select>
+-->
+
+   <!--<button onclick="mostrar_inputs()"> Mostrar </button>--> 
+
+  <!--<script>
+     
+/*function mostrar_inputs(){
+let seleccion= document.getElementById("seleccion").value;
+alert( seleccion);
+
+
+}
+
+
+*/    
+  </script> -->
+</body>
+
+
+
+
+</html>
+{% endblock content %}

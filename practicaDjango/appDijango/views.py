@@ -36,17 +36,21 @@ from email.message import EmailMessage
 from django.utils.html import strip_tags
 from django.db.models import Sum, F, FloatField
 from django.core.mail import send_mail
-from decimal import Decimal  # Importa Decimal para manejar valores monetarios
-#django nos permite tener forms#
+
 from django.core.paginator import Paginator
 from django.views.defaults import page_not_found
-from django.template import RequestContext
-from django.db.models import Q
+
+import json
+
 from .forms import UserRegisterForm, ComentarioForm
 from django.utils.timezone import datetime, now
 # Create your views here.
 from .context_processor import importe_total_carro
 # el context es para pedir datos a base 
+
+
+
+
 
 def layout(request):
 
@@ -450,6 +454,110 @@ def consultarc(request):
   
   context= {'datos': correo}
   return render(request, 'social/consultarc.html', context )
+
+
+
+@login_required # solo los usuairos autneticado pueden entrar 
+def consultar_historial(request):
+    
+ # obtiene todos los usuarios y asignar a selected_user si se selecciona uno    
+    users = User.objects.all() #aqui usuers accede a todos los elemtneos del modelo usuario
+    selected_user = None #esta es la bandera para ver si ya se seleccion inicializarlo en NONE
+#representar el usuario que ha sido seleccionado a través del menú desplegable en la interfaz de usuario.
+
+
+# obtiene todas las modificaciones ordenadas por timestamp_modificacion de forma descendente
+    historial = ModificacionDatos.objects.all().order_by('-timestamp_modificacion')
+    campos = ModificacionDatos._meta.fields # este es para los campos del modelo 
+    
+# verifica si la solicitud es de tipo GET porque solo se va a obtener, no se va a aenviar nada 
+    if request.method == 'GET':
+           # Obtener el ID del usuario seleccionado desde los parámetros de la URL
+     selected_user_id = request.GET.get('selected_user') #aqui jalo el id del usuario seleccionado
+     
+# Verifica si se ha seleccionado un usuario
+    if selected_user_id:
+        try:
+   # Intentar obtener el usuario seleccionado
+#pk es la primary key 
+            selected_user = User.objects.get(pk=selected_user_id)
+   # Filtrar el historial solo para el usuario seleccionado
+   
+#datos es el cmapo de mi modelo que tiene la llave foranea 
+            historial = ModificacionDatos.objects.filter(datos__user=selected_user).order_by('-timestamp_modificacion')
+        except User.DoesNotExist:   # Manejar la excepción si el usuario no existe
+            selected_user = None
+            historial = ModificacionDatos.objects.all().order_by('-timestamp_modificacion')
+    else:
+        selected_user = None
+        historial = ModificacionDatos.objects.all().order_by('-timestamp_modificacion')
+
+    context = {'historial': historial, 'users': users, 'selected_user': selected_user, 'campos': campos}
+    return render(request, 'social/consultar_historial.html', context)
+
+
+
+
+@login_required # solo los usuairos autneticado pueden entrar 
+def consultar_posts(request):
+    
+ # obtiene todos los usuarios y asignar a selected_user si se selecciona uno    
+    users = User.objects.all() #aqui usuers accede a todos los elemtneos del modelo usuario
+    selected_user = None #esta es la bandera para ver si ya se seleccion inicializarlo en NONE
+#representar el usuario que ha sido seleccionado a través del menú desplegable en la interfaz de usuario.
+
+
+# obtiene todas las modificaciones ordenadas por timestamp_modificacion de forma descendente
+    comentarios = Comentarios.objects.all().order_by('-timestamp')
+    campos = Comentarios._meta.fields # este es para los campos del modelo 
+    
+# verifica si la solicitud es de tipo GET porque solo se va a obtener, no se va a aenviar nada 
+    if request.method == 'GET':
+           # Obtener el ID del usuario seleccionado desde los parámetros de la URL
+     selected_user_id = request.GET.get('selected_user') #aqui jalo el id del usuario seleccionado
+     
+# Verifica si se ha seleccionado un usuario
+    if selected_user_id:
+        try:
+   # Intentar obtener el usuario seleccionado
+#pk es la primary key 
+            selected_user = User.objects.get(pk=selected_user_id)
+   # Filtrar el historial solo para el usuario seleccionado
+   
+#datos es el cmapo de mi modelo que tiene la llave foranea 
+            comentarios = Comentarios.objects.filter(user=selected_user).order_by('-timestamp')
+        except User.DoesNotExist:   # Manejar la excepción si el usuario no existe
+            selected_user = None
+            comentarios = Comentarios.objects.all().order_by('-timestamp')
+    else:
+        selected_user = None
+        comentarios = Comentarios.objects.all().order_by('-timestamp')
+
+    context = {'comentarios': comentarios, 'users': users, 'selected_user': selected_user, 'campos': campos}
+    return render(request, 'social/consultar_posts.html', context)
+
+
+
+
+@login_required # solo los usuairos autneticado pueden entrar 
+def consultar_compras(request):
+  
+    # Simulación de datos, reemplázalos con tus propios datos de la base de datos
+    labels = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo']
+    valores = [12, 19, 7, 5, 2]
+
+    # Convierte los datos a formato JSON
+    data = {'labels': labels, 'valores': valores}
+    datos_json = json.dumps(data)
+
+    context = {'datos_json': datos_json}
+    return render(request, 'social/consultar_compras.html', context)
+  
+  
+
+
+
+
 
 
 

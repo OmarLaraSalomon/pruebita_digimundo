@@ -20,7 +20,7 @@
 			<ul>
 
 				{% if request.user.is_authenticated %}
-				<li><a href="{% url 'logout' %}">Logout</a></li>
+				<li><a href="{% url 'logout' %}">Cerrar Sesión</a></li>
 				{% else %}
 				<li><a href="{% url 'registro' %}">Registro</a></li>
 				<li><a href="{% url 'login' %}">Login</a></li>
@@ -45,17 +45,41 @@
 		{% if user.is_superuser == True  %}
 
 		
-		<a class="feed" href="{% url 'feed' %}">Inicio</a>
-		&nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp;
-		<a class="home" href="{% url 'home' %}">Tiendita</a>
+		<!--<a class="feed" href="{% url 'feed' %}">Inicio</a>
+		&nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; -->
+
+
+		<a class="home" href="{% url 'home' %}">Tienda</a>
 		&nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp;
 		
-		<a class="datos" href="{% url 'contactosregistro' %}">Llenar datos</a>
-		&nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp;
-		<a href="{% url 'consultas' %}">Consultas</a>
-		&nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp;
+	<!--	<a class="datos" href="{% url 'contactosregistro' %}">Llenar datos</a>-->
+		
+
+
+		<!--<a href="{% url 'consultas' %}">Consultas</a> -->
+	
+
 		<a href="{% url 'consultarc' %}">Consultar Correo</a>
 		&nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp;
+
+
+
+		<a href="{% url 'consultar_historial' %}">Consultar Historiales</a>
+		&nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp;
+
+
+
+
+		<a href="{% url 'consultar_posts' %}">Consultar Posts</a>
+		&nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp;
+
+
+
+
+
+		<a href="{% url 'consultar_compras' %}">Consultar Compras</a>
+		&nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp;
+
 		{% else %}
 
 
@@ -79,7 +103,7 @@
 
 		
 
-		<a class="correo" href="{% url 'mandarcorreo' %}">Contactanos</a>
+		<a class="correo" href="{% url 'mandarcorreo' %}">Contactar</a>
 		&nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp;
 		
 		{% endif %}

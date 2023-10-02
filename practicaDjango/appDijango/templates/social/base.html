@@ -48,7 +48,8 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarResponsive">
 
-        
+        {% if request.user.is_authenticated %}
+		    {% if user.is_superuser == True  %}
         <ul class="navbar-nav mx-auto">
           <li class="nav-item {% if request.path == '' %} active {% endif %}  px-lg-4">
 
@@ -58,11 +59,11 @@
           </li>
 
 
-          <li class="nav-item  px-lg-4">
+         <!-- <li class="nav-item  px-lg-4">
             <a class="nav-link text-uppercase text-expanded" href="{% url 'servicios' %}">
               <h3>Noticias</h3>
             </a>
-          </li>
+          </li>-->
 
           <li class="nav-item  px-lg-4">
             <a class="nav-link text-uppercase text-expanded" href="{% url 'productos' %}">
@@ -73,25 +74,79 @@
 
           <li class="nav-item  px-lg-4">
             <a class="nav-link text-uppercase text-expanded" href="{% url 'perfil' %}">
-              <h3>Perfil</h3>
+              <h3>Consultas</h3>
             </a>
           </li>
 
-          <li class="nav-item  px-lg-4">
+          <!--<li class="nav-item  px-lg-4">
             <a class="nav-link text-uppercase text-expanded" href="{% url 'mandarcorreo' %}">
               <h3> Contacto</h3>
             </a>
-          </li>
+          </li> -->
           <li class="nav-item  px-lg-4">
             <a class="nav-link text-uppercase text-expanded" href="{% url 'logout' %}">
               <h3>Cerrar Sesion</h3>
 
-              
+              {% else %}
+<!--AQUI YA VA CUANDO NO E SSUPER USUARIO O SEA USURIO NOTMARL-->
+
+
+              <ul class="navbar-nav mx-auto">
+                <li class="nav-item {% if request.path == '' %} active {% endif %}  px-lg-4">
+
+
+
+                <a class="nav-link text-uppercase text-expanded" href="{% url 'home' %}">
+                  <h3>Inicio</h3>
+                </a>
+              </li>
+    
+    
+             <!-- <li class="nav-item  px-lg-4">
+                <a class="nav-link text-uppercase text-expanded" href="{% url 'servicios' %}">
+                  <h3>Noticias</h3>
+                </a>
+              </li>-->
+    
+              <li class="nav-item  px-lg-4">
+                <a class="nav-link text-uppercase text-expanded" href="{% url 'productos' %}">
+                  <h3>Productos</h3>
+                </a>
+              </li>
+    
+    
+              <li class="nav-item  px-lg-4">
+                <a class="nav-link text-uppercase text-expanded" href="{% url 'perfil' %}">
+                  <h3>Mi perfil</h3>
+                </a>
+              </li>
+    
+              <li class="nav-item  px-lg-4">
+                <a class="nav-link text-uppercase text-expanded" href="{% url 'mandarcorreo' %}">
+                  <h3> Contactar</h3>
+                </a>
+              </li> 
+
+
+              <li class="nav-item  px-lg-4">
+                <a class="nav-link text-uppercase text-expanded" href="{% url 'logout' %}">
+                  <h3>Cerrar Sesion</h3>
+
+	        {% endif %}
+
+         {% else %}
+
+
+        {% endif %}
 
   </nav></a>
   </li>
 
   </ul>
+
+
+
+
   </div>
   </div>
   </nav>
