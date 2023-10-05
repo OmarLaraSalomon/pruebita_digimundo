@@ -1,0 +1,69 @@
+
+
+{% block content %}
+
+{% load static%}
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualización de datos con ChartJS</title>
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300" rel="stylesheet" />
+      <link rel="stylesheet" href="{% static 'styles/consulta_compras.css' %}">
+    <!--<link rel="stylesheet" href="{% static 'styles/consultas.css' %}"> -->
+
+    <main>
+
+        <h1>PRUEBA DE GRAFICOS </h1>
+        <p>Consumiendo API pokemon</p>
+
+        <hr>
+
+        <section class="cols-2">
+<br>
+            <figure>
+                <h2>Comparativa de Pokemon</h2>
+                <canvas id="pastelChart"></canvas>
+            </figure>
+            <figure>
+                <h2>Comparativa de colores:
+                    <select id="colorOptions">
+                        <option value="black">Negro </option>
+                        <option value="blue">Azul </option>
+                        <option value="brown">Cafe </option>
+
+                        <option value="gray">Gris </option>
+                        <option value="green">Verde </option>
+                        <option value="pink">Rosa </option>
+
+                        <option value="purple">Morado </option>
+                        <option value="red">Rojo </option>
+                        <option value="white">Blanco </option>
+                        <option value="yellow">Amarillo </option>
+                        
+                    </select>
+                </h2>
+                <canvas id="radarChart"></canvas>
+            </figure>
+
+        </section>
+
+        <section class="cols-1">
+            <figure>
+                <h2>STATS DE POKEMON</h2>
+                <canvas id="lineChart" height="300px"></canvas>
+            </figure>
+        </section>
+
+    </main>
+
+  
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <script type="module" src="{% static 'js/app_prueba.js' %}"> </script>
+    <script type="module"src="{% static 'js/helpers_prueba.js' %}"></script>
+    <script type="module" src="{% static 'js/handlers_prueba.js' %}"> </script>
+</html>
+{% endblock %} 

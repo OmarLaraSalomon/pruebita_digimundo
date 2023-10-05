@@ -561,6 +561,12 @@ def consultar_compras(request):
 
 
 
+
+def graficos(request):
+
+  return render(request, 'social/graficos_pruebas.html')
+
+
 def tiendita(request):
 
   return render(request, 'social/tienda.html')

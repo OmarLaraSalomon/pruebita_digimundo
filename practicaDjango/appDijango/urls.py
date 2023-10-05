@@ -33,6 +33,7 @@ urlpatterns = [
     url('^consultar_historial/$', views.consultar_historial, name="consultar_historial"),
     url('^consultar_posts/$', views.consultar_posts, name="consultar_posts"),
     url('^consultar_compras/$', views.consultar_compras, name="consultar_compras"),
+    url('^graficos/$', views.graficos, name="graficos"),
     path('', views.enviar_mail, name="enviar_email"),
 
     url('procesar_pedido/', views.procesar_pedido, name="procesar_pedido"),

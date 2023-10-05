@@ -4,46 +4,61 @@
 
 {% load static%}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grafico Dinamico</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-</head>
+    <title>Visualización de datos con ChartJS</title>
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300" rel="stylesheet" />
+  <!--  <link rel="stylesheet" href="{% static 'styles/consulta_compras.css' %}">-->
+  
+
 <body>
-    <h1>Grafico Dinamico</h1>
+    <main>
 
-    <br> <br>
-    <canvas id="miGrafico"></canvas>
+      
+        <p>Visualización de estadísticas globales</p>
 
-    <script>
-        // Recupera los datos JSON del contexto de Django
-        var datos = JSON.parse('{{ datos_json|safe }}');
+        <hr>
 
-        // Configura y renderiza el gráfico usando Chart.js
-        var ctx = document.getElementById('miGrafico').getContext('2d');
-        var miGrafico = new Chart(ctx, {
-            type: 'bar', // Tipo de gráfico (puedes cambiarlo según tus necesidades)
-            data: {
-                labels: datos.labels,
-                datasets: [{
-                    label: 'Valores',
-                    data: datos.valores,
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)', // Color de fondo
-                    borderColor: 'rgba(75, 192, 192, 1)', // Color del borde
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
-    </script>
+        <section class="cols-2">
+
+            <figure>
+                <h2>Comparativa de modelos</h2>
+                <canvas id="modelsChart"></canvas>
+            </figure>
+
+            <figure>
+                <h2>Comparativa de características:
+                    <select id="featuresOptions">
+                        <option value="height">Altura (m)</option>
+                        <option value="length">Longitud (m)</option>
+                        <option value="speed">Velocidad (km/h)</option>
+                    </select>
+                </h2>
+                <canvas id="featuresChart"></canvas>
+            </figure>
+
+        </section>
+
+        <section class="cols-1">
+            <figure>
+                <h2>Construcciones por año</h2>
+                <canvas id="yearsChart" height="300px"></canvas>
+            </figure>
+        </section>
+
+    </main>
+
+  
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+
+
+    <script src="{% static 'js/app.js' %}"> </script>
+    <script src="{% static 'js/handlers.js' %}"> </script>
+    <script src="{% static 'js/helpers.js' %}"> </script>
 </body>
 </html>
-{% endblock %}
+{% endblock %} 
